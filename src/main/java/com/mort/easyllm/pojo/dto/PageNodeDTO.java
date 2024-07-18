@@ -1,6 +1,7 @@
 package com.mort.easyllm.pojo.dto;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONPObject;
 import lombok.Data;
 import lombok.NonNull;
 
@@ -16,7 +17,7 @@ public class PageNodeDTO {
     @NonNull
     private Boolean isBranchNode;
 
-    private JsonNode properties;
+    private JSONObject properties;
 
     private PageNodeDTO nextNode;
 

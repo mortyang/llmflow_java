@@ -1,11 +1,8 @@
 package com.mort.easyllm.Node.RunableNode.RequestNode.Properties;
 
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.util.JSONPObject;
-import com.mort.easyllm.Utils.JsonUtil;
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.TypeReference;
 import lombok.*;
 
 import java.util.Map;
@@ -22,11 +19,11 @@ public class HttpNodeProperties {
     private String body;
 
 
-    public static HttpNodeProperties jsonObjectConvert(JsonNode properties){
+    public static HttpNodeProperties jsonObjectConvert(JSONObject properties) {
         return HttpNodeProperties.builder()
-                .url(properties.path("url").asText())
-                .body(properties.path("body").asText())
-                .headers(JsonUtil.objectMapper.convertValue(properties.path("headers"), new TypeReference<>() {
+                .url(properties.getString("url"))
+                .body(properties.getString("body"))
+                .headers(properties.getObject("headers", new TypeReference<>() {
                 }))
                 .build();
     }

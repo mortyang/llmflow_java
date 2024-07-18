@@ -1,10 +1,13 @@
 package com.mort.easyllm.Node.InfoNode;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONPObject;
 import com.mort.easyllm.Config.NodeFactory;
 import com.mort.easyllm.Node.RunableNode.RunnableNode;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Mort
@@ -27,15 +30,16 @@ public class InfoNode {
     private String output;
 
 
+    public InfoNode() {}
+
     @Builder
     public InfoNode(@NonNull String nodeName,
                     @NonNull String nodeType,
-                    @NonNull String input,
-                    Object properties,
-                    InfoNode nextNode, boolean isBranchNode) {
+                    @NotNull Boolean isBranchNode,
+                    JSONObject properties,
+                    InfoNode nextNode) {
         this.nodeName = nodeName;
         this.nodeType = nodeType;
-        this.input = input;
         this.nextNode = nextNode;
         this.isBranchNode = isBranchNode;
         if (!isBranchNode) {

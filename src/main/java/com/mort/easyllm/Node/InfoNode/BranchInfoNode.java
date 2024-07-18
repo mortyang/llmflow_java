@@ -1,5 +1,7 @@
 package com.mort.easyllm.Node.InfoNode;
 
+import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.JSONPObject;
 import com.mort.easyllm.Config.NodeFactory;
 import com.mort.easyllm.Node.BranchNode.BranchNode;
 import lombok.*;
@@ -22,10 +24,9 @@ public class BranchInfoNode extends InfoNode {
     @Builder(builderMethodName = "branchInfoNodeBuilder")
     public BranchInfoNode(@NonNull String nodeName,
                           @NonNull String nodeType,
-                          @NonNull String input,
-                          Object properties,
+                          JSONObject properties,
                           Boolean isBranchNode) {
-        super(nodeName, nodeType, input, properties, null, isBranchNode);
+        super(nodeName, nodeType, isBranchNode, properties, null);
         this.branchNode = (BranchNode) NodeFactory.getRunableNodeByName(nodeType, properties);
     }
 

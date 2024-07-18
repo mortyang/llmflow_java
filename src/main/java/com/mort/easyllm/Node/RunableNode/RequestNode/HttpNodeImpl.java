@@ -1,6 +1,6 @@
 package com.mort.easyllm.Node.RunableNode.RequestNode;
 
-import com.fasterxml.jackson.databind.JsonNode;
+import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.Node.RunableNode.RunnableNode;
 import com.mort.easyllm.Node.RunableNode.RequestNode.Properties.HttpNodeProperties;
 
@@ -9,7 +9,7 @@ public class HttpNodeImpl implements RunnableNode {
     private final HttpNodeProperties properties;
 
     public HttpNodeImpl(Object properties) {
-        this.properties = HttpNodeProperties.jsonObjectConvert((JsonNode) properties);
+        this.properties = HttpNodeProperties.jsonObjectConvert((JSONObject) properties);
         System.out.println("HttpNode properties:" + properties);
     }
 
