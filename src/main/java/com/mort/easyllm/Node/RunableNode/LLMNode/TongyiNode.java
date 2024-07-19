@@ -4,6 +4,7 @@ import com.mort.easyllm.Node.RunableNode.RunnableNode;
 
 public class TongyiNode implements RunnableNode {
 
+
     /**
      * @param input
      * @return

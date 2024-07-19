@@ -10,12 +10,11 @@ public class HttpNodeImpl implements RunnableNode {
 
     public HttpNodeImpl(Object properties) {
         this.properties = HttpNodeProperties.jsonObjectConvert((JSONObject) properties);
-        System.out.println("HttpNode properties:" + properties);
     }
 
     @Override
     public String run(String input) {
-        System.out.println("HttpNode properties:" + properties);
+
         return "";
     }
 

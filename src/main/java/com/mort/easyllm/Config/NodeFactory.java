@@ -13,7 +13,7 @@ import java.util.Map;
 @Slf4j
 public class NodeFactory {
 
-    private static final Map<String, Class<?>> NODEMAP = new HashMap<>();
+    public static final Map<String, Class<?>> NODEMAP = new HashMap<>();
 
     // 注册类到工厂
     static {

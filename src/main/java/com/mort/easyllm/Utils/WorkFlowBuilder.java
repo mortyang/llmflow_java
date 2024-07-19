@@ -1,18 +1,71 @@
 package com.mort.easyllm.Utils;
 
+import com.mort.easyllm.Exception.PropertiesParseException;
 import com.mort.easyllm.Node.InfoNode.BranchInfoNode;
 import com.mort.easyllm.Node.InfoNode.InfoNode;
 import com.mort.easyllm.pojo.dto.PageNodeLinearDTO;
-import com.mort.easyllm.pojo.dto.WorkFlowDTO;
 import org.springframework.stereotype.Component;
 
+import java.text.ParseException;
 import java.util.*;
 
 @Component
 public class WorkFlowBuilder {
 
+    private void initBranchInfoNode(PageNodeLinearDTO currentPageNode, LinkedHashMap<String, PageNodeLinearDTO> pageNodeMap) {
+        if (currentPageNode.getDefaultNodeName() == null
+                || currentPageNode.getDefaultNodeName().isEmpty()
+                || pageNodeMap.containsKey(currentPageNode.getDefaultNodeName())) {
+            throw new PropertiesParseException();
+        }
+        BranchInfoNode branchInfoNode = BranchInfoNode.branchInfoNodeBuilder()
+                .nodeName(currentPageNode.getNodeName())
+                .nodeType(currentPageNode.getNodeType())
+                .isBranchNode(currentPageNode.getIsBranchNode())
+                .properties(currentPageNode.getProperties())
+                .defaultNodeName(currentPageNode.getDefaultNodeName())
+                .build();
+        currentPageNode.setInfoNode(branchInfoNode);
+        PageNodeLinearDTO fatherPageNode = pageNodeMap.get(currentPageNode.getFatherNodeName());
+        if (fatherPageNode.getInfoNode() instanceof BranchInfoNode) {
+            //配置默认节点
+            if (Objects.equals(fatherPageNode.getDefaultNodeName(), currentPageNode.getNodeName())) {
+                ((BranchInfoNode) fatherPageNode.getInfoNode()).setDefaultNextNode(branchInfoNode);
+            }
+            //注册到父节点
+            ((BranchInfoNode) fatherPageNode.getInfoNode()).getNextNodeMap().put(currentPageNode.getNodeName(), branchInfoNode);
+            return;
+        }
+        fatherPageNode.getInfoNode().setNextNode(branchInfoNode);
+    }
+
+    private void initInfoNode(PageNodeLinearDTO currentPageNode, LinkedHashMap<String, PageNodeLinearDTO> pageNodeMap) {
+        InfoNode infoNode = InfoNode.builder()
+                .nodeName(currentPageNode.getNodeName())
+                .nodeType(currentPageNode.getNodeType())
+                .isBranchNode(currentPageNode.getIsBranchNode())
+                .properties(currentPageNode.getProperties())
+                .build();
+        currentPageNode.setInfoNode(infoNode);
+
+        PageNodeLinearDTO fatherPageNode = pageNodeMap.get(currentPageNode.getFatherNodeName());
+        if (fatherPageNode.getInfoNode() instanceof BranchInfoNode) {
+            ((BranchInfoNode) fatherPageNode.getInfoNode()).getNextNodeMap().put(currentPageNode.getNodeName(), infoNode);
+            return;
+        }
+        fatherPageNode.getInfoNode().setNextNode(infoNode);
+    }
+
+    private LinkedHashMap<String, PageNodeLinearDTO> listToMap(List<PageNodeLinearDTO> frontNodeLinear) {
+        LinkedHashMap<String, PageNodeLinearDTO> nodeMap = new LinkedHashMap<>();
+        for (PageNodeLinearDTO frontNode : frontNodeLinear) {
+            nodeMap.put(frontNode.getNodeName(), frontNode);
+        }
+        return nodeMap;
+    }
+
     public InfoNode buildWorkFlow(List<PageNodeLinearDTO> pageNodeList) {
-        LinkedHashMap<String, PageNodeLinearDTO> pageNodeMap  = mapConverter(pageNodeList);
+        LinkedHashMap<String, PageNodeLinearDTO> pageNodeMap = listToMap(pageNodeList);
         Iterator<Map.Entry<String, PageNodeLinearDTO>> mapIterator = pageNodeMap.entrySet().iterator();
         //首节点处理
         PageNodeLinearDTO firstFrontNode = mapIterator.next().getValue();
@@ -32,44 +85,8 @@ public class WorkFlowBuilder {
             }
             initInfoNode(tempPageNode, pageNodeMap);
         }
-
         return startNode;
     }
-
-
-    private void initBranchInfoNode(PageNodeLinearDTO pageNode, LinkedHashMap<String, PageNodeLinearDTO> frontNode) {
-        BranchInfoNode branchInfoNode = BranchInfoNode.branchInfoNodeBuilder()
-                .nodeName(pageNode.getNodeName())
-                .nodeType(pageNode.getNodeType())
-                .isBranchNode(pageNode.getIsBranchNode())
-                .properties(pageNode.getProperties())
-                .build();
-        pageNode.setInfoNode(branchInfoNode);
-        PageNodeLinearDTO fatherNode = frontNode.get(pageNode.getFatherNodeName());
-        if (fatherNode.getInfoNode() instanceof BranchInfoNode) {
-            ((BranchInfoNode) fatherNode.getInfoNode()).getNextNodeMap().put(pageNode.getNodeName(), branchInfoNode);
-            return;
-        }
-        fatherNode.getInfoNode().setNextNode(branchInfoNode);
-    }
-
-    private void initInfoNode(PageNodeLinearDTO pageNode, LinkedHashMap<String, PageNodeLinearDTO> frontNode) {
-        InfoNode infoNode = InfoNode.builder()
-                .nodeName(pageNode.getNodeName())
-                .nodeType(pageNode.getNodeType())
-                .isBranchNode(pageNode.getIsBranchNode())
-                .properties(pageNode.getProperties())
-                .build();
-        pageNode.setInfoNode(infoNode);
-
-        PageNodeLinearDTO fatherNode = frontNode.get(pageNode.getFatherNodeName());
-        if (fatherNode.getInfoNode() instanceof BranchInfoNode) {
-            ((BranchInfoNode) fatherNode.getInfoNode()).getNextNodeMap().put(pageNode.getNodeName(), infoNode);
-            return;
-        }
-        fatherNode.getInfoNode().setNextNode(infoNode);
-    }
-
 
 //    public void dfsTraversal(@NotNull PageNodeDTO frontNode, InfoNode infoNode) {
 //        if (frontNode.getNextNode() == null) {
@@ -109,12 +126,5 @@ public class WorkFlowBuilder {
 //                .build();
 //    }
 
-    public LinkedHashMap<String, PageNodeLinearDTO> mapConverter (List<PageNodeLinearDTO> frontNodeLinear){
-        LinkedHashMap<String, PageNodeLinearDTO> nodeMap = new LinkedHashMap<>();
-        for(PageNodeLinearDTO frontNode : frontNodeLinear){
-            nodeMap.put(frontNode.getNodeName(),frontNode);
-        }
-        return nodeMap;
-    }
 
 }

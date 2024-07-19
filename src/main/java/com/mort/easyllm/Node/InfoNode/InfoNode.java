@@ -1,7 +1,6 @@
 package com.mort.easyllm.Node.InfoNode;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONPObject;
 import com.mort.easyllm.Config.NodeFactory;
 import com.mort.easyllm.Node.RunableNode.RunnableNode;
 import lombok.Builder;
@@ -12,6 +11,7 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author Mort
  */
+//TODO:线程安全优化
 @Data
 public class InfoNode {
 
@@ -53,6 +53,12 @@ public class InfoNode {
         if (nextNode != null) {
             this.nextNode.input = this.output;
         }
+        clear();
+    }
+
+    public void clear(){
+        this.input = null;
+        this.output =null;
     }
 
 
