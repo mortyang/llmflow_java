@@ -1,12 +1,11 @@
-package com.mort.easyllm.Utils;
+package com.mort.easyllm.Service.WorkFlow;
 
 import com.mort.easyllm.Exception.PropertiesParseException;
 import com.mort.easyllm.Node.InfoNode.BranchInfoNode;
 import com.mort.easyllm.Node.InfoNode.InfoNode;
-import com.mort.easyllm.pojo.dto.PageNodeLinearDTO;
+import com.mort.easyllm.Pojo.dto.PageNodeLinearDTO;
 import org.springframework.stereotype.Component;
 
-import java.text.ParseException;
 import java.util.*;
 
 @Component
@@ -15,9 +14,10 @@ public class WorkFlowBuilder {
     private void initBranchInfoNode(PageNodeLinearDTO currentPageNode, LinkedHashMap<String, PageNodeLinearDTO> pageNodeMap) {
         if (currentPageNode.getDefaultNodeName() == null
                 || currentPageNode.getDefaultNodeName().isEmpty()
-                || pageNodeMap.containsKey(currentPageNode.getDefaultNodeName())) {
-            throw new PropertiesParseException();
+                || !pageNodeMap.containsKey(currentPageNode.getDefaultNodeName())) {
+            throw new PropertiesParseException("分支节点必须有兜底", currentPageNode.getNodeName());
         }
+        //初始化本节点
         BranchInfoNode branchInfoNode = BranchInfoNode.branchInfoNodeBuilder()
                 .nodeName(currentPageNode.getNodeName())
                 .nodeType(currentPageNode.getNodeType())
@@ -26,17 +26,16 @@ public class WorkFlowBuilder {
                 .defaultNodeName(currentPageNode.getDefaultNodeName())
                 .build();
         currentPageNode.setInfoNode(branchInfoNode);
-        PageNodeLinearDTO fatherPageNode = pageNodeMap.get(currentPageNode.getFatherNodeName());
-        if (fatherPageNode.getInfoNode() instanceof BranchInfoNode) {
-            //配置默认节点
-            if (Objects.equals(fatherPageNode.getDefaultNodeName(), currentPageNode.getNodeName())) {
-                ((BranchInfoNode) fatherPageNode.getInfoNode()).setDefaultNextNode(branchInfoNode);
+        // 父节点配置
+        for (String fatherNodeName : currentPageNode.getFatherNodeNameList()) {
+            PageNodeLinearDTO fatherPageNode = pageNodeMap.get(fatherNodeName);
+            if (fatherPageNode.getInfoNode() instanceof BranchInfoNode) {
+                //注册到父节点
+                ((BranchInfoNode) fatherPageNode.getInfoNode()).getNextNodeMap().put(currentPageNode.getNodeName(), branchInfoNode);
+                return;
             }
-            //注册到父节点
-            ((BranchInfoNode) fatherPageNode.getInfoNode()).getNextNodeMap().put(currentPageNode.getNodeName(), branchInfoNode);
-            return;
+            fatherPageNode.getInfoNode().setNextNode(branchInfoNode);
         }
-        fatherPageNode.getInfoNode().setNextNode(branchInfoNode);
     }
 
     private void initInfoNode(PageNodeLinearDTO currentPageNode, LinkedHashMap<String, PageNodeLinearDTO> pageNodeMap) {
@@ -47,13 +46,14 @@ public class WorkFlowBuilder {
                 .properties(currentPageNode.getProperties())
                 .build();
         currentPageNode.setInfoNode(infoNode);
-
-        PageNodeLinearDTO fatherPageNode = pageNodeMap.get(currentPageNode.getFatherNodeName());
-        if (fatherPageNode.getInfoNode() instanceof BranchInfoNode) {
-            ((BranchInfoNode) fatherPageNode.getInfoNode()).getNextNodeMap().put(currentPageNode.getNodeName(), infoNode);
-            return;
+        for (String fatherNodeName : currentPageNode.getFatherNodeNameList()) {
+            PageNodeLinearDTO fatherPageNode = pageNodeMap.get(fatherNodeName);
+            if (fatherPageNode.getInfoNode() instanceof BranchInfoNode) {
+                ((BranchInfoNode) fatherPageNode.getInfoNode()).getNextNodeMap().put(currentPageNode.getNodeName(), infoNode);
+                return;
+            }
+            fatherPageNode.getInfoNode().setNextNode(infoNode);
         }
-        fatherPageNode.getInfoNode().setNextNode(infoNode);
     }
 
     private LinkedHashMap<String, PageNodeLinearDTO> listToMap(List<PageNodeLinearDTO> frontNodeLinear) {

@@ -4,7 +4,6 @@ import com.mort.easyllm.Node.RunableNode.RunnableNode;
 
 public class TongyiNode implements RunnableNode {
 
-
     /**
      * @param input
      * @return
@@ -13,6 +12,5 @@ public class TongyiNode implements RunnableNode {
     public String run(String input) {
         return "";
     }
-
 
 }

@@ -1,4 +1,4 @@
-package com.mort.easyllm.Config;
+package com.mort.easyllm.Utils;
 
 import com.mort.easyllm.Node.BranchNode.NormalJudgeNodeImpl;
 import com.mort.easyllm.Node.RunableNode.RequestNode.HttpNodeImpl;
@@ -24,7 +24,6 @@ public class NodeFactory {
         NODEMAP.put("NormalJudgeNode", NormalJudgeNodeImpl.class);
     }
 
-    //todo:增加对每个runnablenode和judgenode存在构造方法的校验
     public static Object getRunableNodeByName(String className,Object initParameter) {
         try {
             Class<?> clazz = NODEMAP.get(className);
@@ -33,7 +32,10 @@ public class NodeFactory {
             } else {
                 throw new IllegalArgumentException("No class registered with name: " + className);
             }
-        } catch (Exception e) {
+        }catch (NoSuchMethodException  e){
+            throw new RuntimeException();
+        }
+        catch (Exception e) {
             log.error("获取类出错",e);
             throw new RuntimeException("Failed to create instance of: " + className, e);
         }

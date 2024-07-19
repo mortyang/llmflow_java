@@ -3,15 +3,17 @@ package com.mort.easyllm.Node.BranchNode;
 import com.mort.easyllm.Node.BranchNode.Properties.NormalJudgeNodeProperties;
 import com.mort.easyllm.Node.InfoNode.InfoNode;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
 public class NormalJudgeNodeImpl implements BranchNode {
 
-    private NormalJudgeNodeProperties properties;
+    private final NormalJudgeNodeProperties properties;
 
     public NormalJudgeNodeImpl(Object properties) {
-
+        this.properties = new NormalJudgeNodeProperties();
+        this.properties.setConditionToNodeMap(new HashMap<>());
     }
 
     @Override

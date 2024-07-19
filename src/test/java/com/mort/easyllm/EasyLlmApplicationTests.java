@@ -1,23 +1,20 @@
 package com.mort.easyllm;
 
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
+import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.Node.InfoNode.InfoNode;
-import com.mort.easyllm.Service.MainService;
-import com.mort.easyllm.Utils.KryoThreadLocal;
+import com.mort.easyllm.Pojo.dto.WorkFlowDTO;
+import com.mort.easyllm.Service.WorkFlow.WorkFlowService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 
 @SpringBootTest
 class EasyLlmApplicationTests {
 
     @Autowired
-    MainService mainService;
+    WorkFlowService workFlowService;
 
     @Test
     void contextLoads() throws IOException {
@@ -28,155 +25,55 @@ class EasyLlmApplicationTests {
                     {
                       "nodeName": "http1",
                       "nodeType": "HttpNode",
-                      "isBranchNode": false,
                       "properties": {
                         "url": "url11",
                         "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
                       },
-                      "nextNodeName": "judge1"
+                      "fatherNodeNameList": ["http1"],
+                      "nextNodeName": "judge1",
+                      "isBranchNode": false
                     },
                     {
                       "nodeName": "judge1",
                       "nodeType": "NormalJudgeNode",
                       "isBranchNode": true,
                       "properties": {},
-                      "fatherNodeName": "http1",
-                      "nextNodesName": ["http2", "http3","http10", "http11","http12", "http13","http14", "http15"]
-                    },
-                    {
-                      "nodeName": "http1",
-                      "nodeType": "HttpNode",
-                      "isBranchNode": false,
-                      "properties": {
-                        "url": "url11",
-                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
-                      },
-                      "fatherNodeName": "judge1"
-                    },
-                    {
-                      "nodeName": "http10",
-                      "nodeType": "HttpNode",
-                      "isBranchNode": false,
-                      "properties": {
-                        "url": "url11",
-                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
-                      },
-                      "fatherNodeName": "judge1"
-                    },
-                    {
-                      "nodeName": "http11",
-                      "nodeType": "HttpNode",
-                      "isBranchNode": false,
-                      "properties": {
-                        "url": "url11",
-                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
-                      },
-                      "fatherNodeName": "judge1"
-                    },
-                    {
-                      "nodeName": "http12",
-                      "nodeType": "HttpNode",
-                      "isBranchNode": false,
-                      "properties": {
-                        "url": "url11",
-                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
-                      },
-                      "fatherNodeName": "judge1"
-                    },
-                    {
-                      "nodeName": "http13",
-                      "nodeType": "HttpNode",
-                      "isBranchNode": false,
-                      "properties": {
-                        "url": "url11",
-                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
-                      },
-                      "fatherNodeName": "judge1"
-                    },
-                    {
-                      "nodeName": "http14",
-                      "nodeType": "HttpNode",
-                      "isBranchNode": false,
-                      "properties": {
-                        "url": "url11",
-                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
-                      },
-                      "fatherNodeName": "judge1"
-                    },
-                    {
-                      "nodeName": "http15",
-                      "nodeType": "HttpNode",
-                      "isBranchNode": false,
-                      "properties": {
-                        "url": "url11",
-                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
-                      },
-                      "fatherNodeName": "judge1"
+                      "fatherNodeNameList": ["http1"],
+                      "defaultNodeName":"http2",
+                      "nextNodesName": ["http2", "http3"]
                     },
                     {
                       "nodeName": "http2",
                       "nodeType": "HttpNode",
-                      "isBranchNode": false,
                       "properties": {
-                        "url": "url11"
+                        "url": "url11",
+                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
                       },
-                      "fatherNodeName": "judge1",
-                      "nextNodeName": null
+                      "fatherNodeNameList": ["judge1"],
+                      "isBranchNode": false
                     },
                     {
                       "nodeName": "http3",
                       "nodeType": "HttpNode",
-                      "isBranchNode": false,
                       "properties": {
-                        "url": "url11"
+                        "url": "url11",
+                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
                       },
-                      "fatherNodeName": "judge1",
-                      "nextNodeName": "judge2"
-                    },
-                    {
-                      "nodeName": "judge2",
-                      "nodeType": "NormalJudgeNode",
-                      "isBranchNode": true,
-                      "properties": {},
-                      "fatherNodeName": "http3",
-                      "nextNodesName": ["http5", "http6"]
-                    },
-                    {
-                      "nodeName": "http5",
-                      "nodeType": "HttpNode",
-                      "isBranchNode": false,
-                      "properties": {
-                        "url": "url11"
-                      },
-                      "fatherNodeName": "judge2",
-                      "nextNodeName": null
-                    },
-                    {
-                      "nodeName": "http6",
-                      "nodeType": "HttpNode",
-                      "isBranchNode": false,
-                      "properties": {
-                        "url": "url11"
-                      },
-                      "fatherNodeName": "judge2",
-                      "nextNodeName": null
+                      "fatherNodeNameList": ["judge1"],
+                      "isBranchNode": false
                     }
                   ]
                 }
                 """;
-        InfoNode s =  mainService.addWorkFlow(json);
+        InfoNode s = workFlowService.addWorkFlow(JSONObject.parseObject(json, WorkFlowDTO.class));
+        System.out.println(workFlowService.runWorkFlow(s, "123"));
 
-        mainService.runWorkFlow(s, "123");
-
-//        KryoThreadLocal.getKryo().setRegistrationRequired(false);
 //        Output output = new Output(new FileOutputStream("file.bin"));
 //        KryoThreadLocal.getKryo().writeObject(output,s);
 //        output.close();
 //        Input input = new Input(new FileInputStream("file.bin"));
 //        InfoNode n = KryoThreadLocal.getKryo().readObject(input, InfoNode.class);
 //        input.close();
-
-
 
     }
 

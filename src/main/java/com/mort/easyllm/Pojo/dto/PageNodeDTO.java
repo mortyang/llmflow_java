@@ -1,4 +1,4 @@
-package com.mort.easyllm.pojo.dto;
+package com.mort.easyllm.Pojo.dto;
 
 import com.alibaba.fastjson2.JSONObject;
 import lombok.Data;

@@ -1,7 +1,7 @@
 package com.mort.easyllm.Node.InfoNode;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Config.NodeFactory;
+import com.mort.easyllm.Utils.NodeFactory;
 import com.mort.easyllm.Node.RunableNode.RunnableNode;
 import lombok.Builder;
 import lombok.Data;
@@ -21,11 +21,11 @@ public class InfoNode {
     private String nodeType;
     @NonNull
     private Boolean isBranchNode;
-
-    private InfoNode nextNode;
     // 执行单元
     private RunnableNode runnableNode;
 
+
+    private InfoNode nextNode;
     private String input;
     private String output;
 
@@ -49,11 +49,11 @@ public class InfoNode {
 
 
     public void runNode() {
+        clear();
         this.output = this.runnableNode.run(this.input);
         if (nextNode != null) {
             this.nextNode.input = this.output;
         }
-        clear();
     }
 
     public void clear(){

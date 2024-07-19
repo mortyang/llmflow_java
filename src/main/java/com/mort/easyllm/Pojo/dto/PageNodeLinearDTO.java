@@ -1,7 +1,6 @@
-package com.mort.easyllm.pojo.dto;
+package com.mort.easyllm.Pojo.dto;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.JSONPObject;
 import com.mort.easyllm.Node.InfoNode.InfoNode;
 import lombok.Data;
 import lombok.NonNull;
@@ -32,7 +31,8 @@ public class PageNodeLinearDTO {
     /**
      * 父亲节点类型，指定Node名
      */
-    private String fatherNodeName;
+    private List<String> fatherNodeNameList;
+
     /**
      * 后续节点类型，指定Node名，分支节点不指定
      */
@@ -56,7 +56,7 @@ public class PageNodeLinearDTO {
     private String defaultNodeName;
 
     /**
-     * 后续节点表，分支节点必穿
+     * 后续节点表，分支节点必传
      */
     private List<String> nextNodesName;
 
