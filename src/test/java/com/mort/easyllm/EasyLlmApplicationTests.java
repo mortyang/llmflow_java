@@ -27,7 +27,10 @@ class EasyLlmApplicationTests {
                       "nodeType": "HttpNode",
                       "properties": {
                         "url": "url11",
-                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
+                        "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打",
+                        "headers":{
+                          "header1":"123"
+                        }
                       },
                       "fatherNodeNameList": ["http1"],
                       "nextNodeName": "judge1",
@@ -65,7 +68,7 @@ class EasyLlmApplicationTests {
                   ]
                 }
                 """;
-        InfoNode s = workFlowService.addWorkFlow(JSONObject.parseObject(json, WorkFlowDTO.class));
+        InfoNode s = workFlowService.createWorkFlow(JSONObject.parseObject(json, WorkFlowDTO.class));
         System.out.println(workFlowService.runWorkFlow(s, "123"));
 
 //        Output output = new Output(new FileOutputStream("file.bin"));

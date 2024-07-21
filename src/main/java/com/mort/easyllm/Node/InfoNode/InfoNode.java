@@ -3,62 +3,54 @@ package com.mort.easyllm.Node.InfoNode;
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.Utils.NodeFactory;
 import com.mort.easyllm.Node.RunableNode.RunnableNode;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
 /**
  * @author Mort
  */
-//TODO:线程安全优化
-@Data
+@Getter
 public class InfoNode {
 
     @NonNull
-    private String nodeName;
+    private final String nodeName;
     @NonNull
-    private String nodeType;
+    private final String nodeType;
     @NonNull
-    private Boolean isBranchNode;
+    private final Boolean isBranchNode;
     // 执行单元
-    private RunnableNode runnableNode;
-
+    private final RunnableNode runnableNode;
 
     private InfoNode nextNode;
-    private String input;
-    private String output;
-
-
-    public InfoNode() {}
 
     @Builder
     public InfoNode(@NonNull String nodeName,
                     @NonNull String nodeType,
                     @NotNull Boolean isBranchNode,
-                    JSONObject properties,
-                    InfoNode nextNode) {
+                    JSONObject properties) {
         this.nodeName = nodeName;
         this.nodeType = nodeType;
-        this.nextNode = nextNode;
         this.isBranchNode = isBranchNode;
         if (!isBranchNode) {
-            this.runnableNode = (RunnableNode) NodeFactory.getRunableNodeByName(nodeType, properties);
+            this.runnableNode = NodeFactory.getNodeByName(nodeType, properties, RunnableNode.class);
+            return;
         }
+        this.runnableNode = null;
+    }
+
+    public void setNextNode(InfoNode infoNode) {
+        if (this.nextNode != null) {
+            throw new RuntimeException("NextNode不可修改");
+        }
+        this.nextNode = infoNode;
     }
 
 
-    public void runNode() {
-        clear();
-        this.output = this.runnableNode.run(this.input);
-        if (nextNode != null) {
-            this.nextNode.input = this.output;
-        }
-    }
-
-    public void clear(){
-        this.input = null;
-        this.output =null;
+    public RunNodeReturn runNode(String input) {
+        RunNodeReturn runNodeReturn = new RunNodeReturn();
+        runNodeReturn.setDeliverMessage(this.runnableNode.run(input));
+        runNodeReturn.setNextNode(this.nextNode);
+        return runNodeReturn;
     }
 
 

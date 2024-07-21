@@ -13,16 +13,16 @@ import java.util.Map;
 /**
  * @author Mort
  */
-@Data
-@EqualsAndHashCode(callSuper = true)
+@Getter
 @Slf4j
 public class BranchInfoNode extends InfoNode {
 
-    private Map<String, InfoNode> nextNodeMap = new HashMap<>();
-    private String defaultNodeName;
+    private final Map<String, InfoNode> nextNodeMap = new HashMap<>();
+
+    private final String defaultNodeName;
 
     //执行单元
-    private BranchNode branchNode;
+    private final BranchNode branchNode;
 
     @Builder(builderMethodName = "branchInfoNodeBuilder")
     public BranchInfoNode(@NonNull String nodeName,
@@ -30,25 +30,24 @@ public class BranchInfoNode extends InfoNode {
                           @NonNull String defaultNodeName,
                           JSONObject properties,
                           Boolean isBranchNode) {
-        super(nodeName, nodeType, isBranchNode, properties, null);
-        this.branchNode = (BranchNode) NodeFactory.getRunableNodeByName(nodeType, properties);
+        super(nodeName, nodeType, isBranchNode, properties);
+        this.branchNode = NodeFactory.getNodeByName(nodeType, properties, BranchNode.class);
         this.defaultNodeName = defaultNodeName;
     }
 
-    public void runNode() {
-        clear();
-        this.setNextNode(this.branchNode.run(this.getInput(), nextNodeMap));
-        if (this.getNextNode() == null) {
-            this.setNextNode(this.nextNodeMap.get(this.defaultNodeName));
+
+    public RunNodeReturn runNode(String input) {
+        RunNodeReturn runNodeReturn = new RunNodeReturn();
+        runNodeReturn.setDeliverMessage(input);
+
+        InfoNode nextNode = this.branchNode.run(input, nextNodeMap);
+        if (nextNode == null) {
+            nextNode = this.nextNodeMap.get(this.defaultNodeName);
         }
-        log.info("判断节点：{}，下一节点：{}",this.getNodeName(),this.getNextNode().getNodeName());
-        this.getNextNode().setInput(this.getInput());
+        runNodeReturn.setNextNode(nextNode);
+        log.info("判断节点：{}，下一节点：{}", this.getNodeName(), runNodeReturn.getNextNode().getNodeName());
+        return runNodeReturn;
     }
 
-    @Override
-    public void clear() {
-        super.clear();
-        this.setNextNode(null);
-    }
 
 }

@@ -1,10 +1,7 @@
-package com.mort.easyllm.Utils;
+package com.mort.easyllm.Context;
 
 import com.esotericsoftware.kryo.Kryo;
-import com.mort.easyllm.Node.InfoNode.InfoNode;
 import org.objenesis.strategy.StdInstantiatorStrategy;
-
-import java.util.concurrent.ConcurrentHashMap;
 
 public class KryoThreadLocal {
 
@@ -16,9 +13,12 @@ public class KryoThreadLocal {
     });
 
 
-
     public static Kryo getKryo() {
         return kryoThreadLocal.get();
+    }
+
+    public static void removeKryo() {
+        kryoThreadLocal.remove();
     }
 
 }

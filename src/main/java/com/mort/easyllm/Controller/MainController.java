@@ -16,7 +16,7 @@ public class MainController {
 
     @PostMapping("/addWorkFlow")
     public String addNode(@RequestBody WorkFlowDTO workFlowDTO){
-        workFlowService.addWorkFlow(workFlowDTO);
+        workFlowService.createWorkFlow(workFlowDTO);
         return "success";
     }
 

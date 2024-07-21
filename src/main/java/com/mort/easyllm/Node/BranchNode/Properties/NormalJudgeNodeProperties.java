@@ -6,11 +6,12 @@ import lombok.Data;
 
 import java.util.Map;
 
+/**
+ * @author Mort
+ */
 @Data
 public class NormalJudgeNodeProperties {
 
     private Map<String,String> conditionToNodeMap;
-
-    private InfoNode defaultNode;
 
 }
