@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 /**
@@ -24,6 +25,9 @@ public class BranchInfoNode extends InfoNode {
     //执行单元
     private final BranchNode branchNode;
 
+    private final ConcurrentHashMap<Thread, InfoNode> nextNodes = new ConcurrentHashMap<>();
+
+
     @Builder(builderMethodName = "branchInfoNodeBuilder")
     public BranchInfoNode(@NonNull String nodeName,
                           @NonNull String nodeType,
@@ -35,19 +39,28 @@ public class BranchInfoNode extends InfoNode {
         this.defaultNodeName = defaultNodeName;
     }
 
+    @Override
+    public InfoNode getNextNode() {
+        return this.nextNodes.get(Thread.currentThread());
+    }
 
-    public RunNodeReturn runNode(String input) {
-        RunNodeReturn runNodeReturn = new RunNodeReturn();
-        runNodeReturn.setDeliverMessage(input);
+    public void setNextNode(InfoNode infoNode) {
+        this.nextNodes.put(Thread.currentThread(), infoNode);
+    }
 
+
+    @Override
+    public String runNode(String input) {
         InfoNode nextNode = this.branchNode.run(input, nextNodeMap);
         if (nextNode == null) {
             nextNode = this.nextNodeMap.get(this.defaultNodeName);
         }
-        runNodeReturn.setNextNode(nextNode);
-        log.info("判断节点：{}，下一节点：{}", this.getNodeName(), runNodeReturn.getNextNode().getNodeName());
-        return runNodeReturn;
+        this.setNextNode(nextNode);
+        log.info("判断节点：{}，下一节点：{}", this.getNodeName(),this.getNextNode().getNodeName());
+        return input;
     }
+
+
 
 
 }

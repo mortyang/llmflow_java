@@ -40,7 +40,7 @@ public class PageNodeLinearDTO {
 
 
     /**
-     * 指向对应WorkFlow链上节点
+     * 指向WorkFlow链上对应节点
      */
     private InfoNode infoNode;
 

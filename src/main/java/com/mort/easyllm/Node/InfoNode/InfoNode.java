@@ -46,11 +46,8 @@ public class InfoNode {
     }
 
 
-    public RunNodeReturn runNode(String input) {
-        RunNodeReturn runNodeReturn = new RunNodeReturn();
-        runNodeReturn.setDeliverMessage(this.runnableNode.run(input));
-        runNodeReturn.setNextNode(this.nextNode);
-        return runNodeReturn;
+    public String runNode(String input) {
+        return this.runnableNode.run(input);
     }
 
 

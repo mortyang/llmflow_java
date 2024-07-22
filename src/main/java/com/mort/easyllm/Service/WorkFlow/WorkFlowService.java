@@ -15,10 +15,10 @@ public class WorkFlowService {
     @Autowired
     private WorkFlowBuilder workFlowBuilder;
 
-    public InfoNode addWorkFlowTest(String json) {
-        WorkFlowDTO workFlowDTO = JSONObject.parseObject(json, WorkFlowDTO.class);
-        return workFlowBuilder.buildWorkFlow(workFlowDTO.getWorkFLowList());
-    }
+//    public InfoNode addWorkFlowTest(String json) {
+//        WorkFlowDTO workFlowDTO = JSONObject.parseObject(json, WorkFlowDTO.class);
+//        return workFlowBuilder.buildWorkFlow(workFlowDTO.getWorkFLowList());
+//    }
 
     public InfoNode createWorkFlow(WorkFlowDTO workFlowDTO) {
         return workFlowBuilder.buildWorkFlow(workFlowDTO.getWorkFLowList());
@@ -26,18 +26,17 @@ public class WorkFlowService {
 
     public String runWorkFlow(InfoNode startNode, String userInput) {
         InfoNode nodeNow = startNode;
-        RunNodeReturn runNodeReturn = new RunNodeReturn();
-        runNodeReturn.setDeliverMessage(userInput);
+        String textTemp = userInput;
         while (true) {
-            log.info("开始执行：{},input:{}",nodeNow.getNodeName(),runNodeReturn.getDeliverMessage());
-            runNodeReturn = nodeNow.runNode(runNodeReturn.getDeliverMessage());
-            log.info("执行结束：{},output:{}",nodeNow.getNodeName(),runNodeReturn.getDeliverMessage());
-            if(runNodeReturn.getNextNode() == null){
+            log.info("开始执行：{},input:{}",nodeNow.getNodeName(),textTemp);
+            textTemp = nodeNow.runNode(textTemp);
+            log.info("执行结束：{},output:{}",nodeNow.getNodeName(),textTemp);
+            if(nodeNow.getNextNode() == null){
                 break;
             }
-            nodeNow = runNodeReturn.getNextNode();
+            nodeNow = nodeNow.getNextNode();
         }
-        return runNodeReturn.getDeliverMessage();
+        return textTemp;
     }
 
 

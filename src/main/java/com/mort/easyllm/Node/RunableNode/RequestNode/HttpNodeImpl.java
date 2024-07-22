@@ -2,10 +2,14 @@ package com.mort.easyllm.Node.RunableNode.RequestNode;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.Annotation.Node;
+import com.mort.easyllm.Node.RunableNode.RequestNode.Utils.HttpUtil;
 import com.mort.easyllm.Node.RunableNode.RunnableNode;
 import com.mort.easyllm.Node.RunableNode.RequestNode.Properties.HttpNodeProperties;
+import lombok.Getter;
+import okhttp3.Response;
 
-@Node(NodeName = "HttpNode")
+
+@Node(nodeName = "HttpNode")
 public class HttpNodeImpl implements RunnableNode {
 
     private final HttpNodeProperties properties;
@@ -14,10 +18,58 @@ public class HttpNodeImpl implements RunnableNode {
         this.properties = HttpNodeProperties.jsonObjectConvert(properties);
     }
 
+
+    @Getter
+    private enum HTTP_METHOD_ENUMS {
+        /**
+         *
+         * @Author Mort
+         * @Date 2024-07-22
+         */
+        GET("get"),
+        /**
+         *
+         * @Author Mort
+         * @Date 2024-07-22
+         */
+        POST("post");
+
+        private final String method;
+
+        HTTP_METHOD_ENUMS(String method) {
+            this.method = method;
+        }
+    }
+
+
     @Override
     public String run(String input) {
-
-        return "";
+        if (HTTP_METHOD_ENUMS.GET.getMethod().equals(properties.getMethod())) {
+            try (Response response = HttpUtil.HTTP_CLIENT.newCall(
+                            HttpUtil.generateGetRequest(properties.getUrl(), properties.getHeaders()))
+                    .execute()) {
+                if (response.body() != null) {
+                    return response.body().string();
+                }
+                return "没有获取到任何信息";
+            } catch (Exception e) {
+                return "Http请求错误";
+            }
+        } else if (HTTP_METHOD_ENUMS.POST.getMethod().equals(properties.getMethod())) {
+            try (Response response = HttpUtil.HTTP_CLIENT.newCall(
+                            HttpUtil.generatePostRequest(properties.getUrl(),
+                                    properties.getHeaders(),
+                                    HttpUtil.gennerateRequestBody(properties.getBody(), properties.getHeaders() == null ? null : properties.getHeaders().get("Content-Type"))))
+                    .execute()) {
+                if (response.body() != null) {
+                    return response.body().string();
+                }
+                return "没有获取到任何信息";
+            } catch (Exception e) {
+                return "Http请求错误";
+            }
+        }
+        return "不存在的请求方法";
     }
 
 }

@@ -26,11 +26,9 @@ class EasyLlmApplicationTests {
                       "nodeName": "http1",
                       "nodeType": "HttpNode",
                       "properties": {
-                        "url": "url11",
+                        "method":"post",
+                        "url": "http://127.0.0.1:8080/test",
                         "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打",
-                        "headers":{
-                          "header1":"123"
-                        }
                       },
                       "fatherNodeNameList": ["http1"],
                       "nextNodeName": "judge1",
@@ -49,7 +47,8 @@ class EasyLlmApplicationTests {
                       "nodeName": "http2",
                       "nodeType": "HttpNode",
                       "properties": {
-                        "url": "url11",
+                        "url": "http://127.0.0.1:8080/test",
+                        "method":"get",
                         "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
                       },
                       "fatherNodeNameList": ["judge1"],
@@ -59,7 +58,8 @@ class EasyLlmApplicationTests {
                       "nodeName": "http3",
                       "nodeType": "HttpNode",
                       "properties": {
-                        "url": "url11",
+                        "url": "http://127.0.0.1:8080/test",
+                        "method":"post",
                         "body": "asdabhjsdgahdkahdkjahdkjbckbaijeb那块加拿大那肯ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定ijeb那块加拿大那肯定定你看点卡阿三大苏打"
                       },
                       "fatherNodeNameList": ["judge1"],
