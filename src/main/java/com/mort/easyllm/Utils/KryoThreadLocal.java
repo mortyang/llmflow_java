@@ -1,4 +1,4 @@
-package com.mort.easyllm.Context;
+package com.mort.easyllm.Utils;
 
 import com.esotericsoftware.kryo.Kryo;
 import org.objenesis.strategy.StdInstantiatorStrategy;

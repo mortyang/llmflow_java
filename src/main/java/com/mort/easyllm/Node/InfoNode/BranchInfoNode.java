@@ -25,6 +25,7 @@ public class BranchInfoNode extends InfoNode {
     //执行单元
     private final BranchNode branchNode;
 
+    //Node不允许被回收，无需清理
     private final ConcurrentHashMap<Thread, InfoNode> nextNodes = new ConcurrentHashMap<>();
 
 
@@ -56,11 +57,9 @@ public class BranchInfoNode extends InfoNode {
             nextNode = this.nextNodeMap.get(this.defaultNodeName);
         }
         this.setNextNode(nextNode);
-        log.info("判断节点：{}，下一节点：{}", this.getNodeName(),this.getNextNode().getNodeName());
+        log.info("判断节点：{}，下一节点：{}", this.getNodeName(), this.getNextNode().getNodeName());
         return input;
     }
-
-
 
 
 }

@@ -46,6 +46,7 @@ public class WorkFlowBuilder {
                 .properties(currentPageNode.getProperties())
                 .build();
         currentPageNode.setInfoNode(infoNode);
+
         for (String fatherNodeName : currentPageNode.getFatherNodeNameList()) {
             PageNodeLinearDTO fatherPageNode = pageNodeMap.get(fatherNodeName);
             if (fatherPageNode.getInfoNode() instanceof BranchInfoNode) {

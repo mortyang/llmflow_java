@@ -50,6 +50,7 @@ public class NodeFactory {
 
     /**
      * 节点注册Map，利用函数式接口快速创建对象
+     *
      * @Author Mort
      * @Date 2024-07-22
      */
@@ -57,10 +58,11 @@ public class NodeFactory {
 
     /**
      * 前端配置Map，负责存储对应node的配置信息返回给前端
+     *
      * @Author Mort
      * @Date 2024-07-22
      */
-    public static final Map<String,List<String>> FRONT_PAGE_CONFIG = new HashMap<>();
+    public static final Map<String, List<String>> FRONT_PAGE_CONFIG = new HashMap<>();
 
     static {
         scanAndRegisterNodes();
@@ -74,11 +76,11 @@ public class NodeFactory {
         Set<Class<?>> nodeClasses = reflections.getTypesAnnotatedWith(Node.class);
         Set<Class<?>> nodePropertiesClasses = reflections.getTypesAnnotatedWith(NodeProperties.class);
 
-        Map<String,List<String>> nodePropertiesMap = new HashMap<>();
-        for (Class<?> nodePropertiesClass : nodePropertiesClasses){
+        Map<String, List<String>> nodePropertiesMap = new HashMap<>();
+        for (Class<?> nodePropertiesClass : nodePropertiesClasses) {
             String nodePropertiesName = nodePropertiesClass.getAnnotation(NodeProperties.class).nodeName();
             List<String> nodeProperties = getPropertiesField(nodePropertiesClass);
-            nodePropertiesMap.put(nodePropertiesName,nodeProperties);
+            nodePropertiesMap.put(nodePropertiesName, nodeProperties);
         }
 
         for (Class<?> nodeClass : nodeClasses) {
@@ -87,7 +89,7 @@ public class NodeFactory {
                 throw new IllegalArgumentException(nodeClass.getName() + "-载入失败，请为手动为该Node指定名称");
             }
             NODE_CREATORS.put(nodeName, createNodeCreator(nodeClass));
-            FRONT_PAGE_CONFIG.put(nodeName,nodePropertiesMap.get(nodeName));
+            FRONT_PAGE_CONFIG.put(nodeName, nodePropertiesMap.get(nodeName));
         }
         log.info("完成包的扫描与初始化，找到了如下包{}", nodeClasses);
     }
@@ -102,18 +104,18 @@ public class NodeFactory {
             } catch (ClassCastException e) {
                 throw new RuntimeException("initParameter 必须是 JSONObject 类型");
             } catch (NoSuchMethodException e) {
-                throw new RuntimeException("类" + nodeClass.getName() + "必须有一个以Object为参数的构造方法,注册失败");
+                throw new RuntimeException("类" + nodeClass.getName() + "必须有一个以JSONObject为参数的构造方法,注册失败");
             } catch (Exception e) {
                 if (e.getCause() instanceof NullPointerException) {
                     throw new RuntimeException(nodeClass.getSimpleName() + "的properties中@NonNull的参数未配置");
                 }
-                throw new RuntimeException("Node注册失败: " + nodeClass.getSimpleName(), e);
+                throw new RuntimeException("Node注册失败: " + nodeClass.getSimpleName() + ",错误原因：" + e.getMessage(), e);
             }
         };
     }
 
 
-    public static List<String> getPropertiesField(Class<?> clazz){
+    public static List<String> getPropertiesField(Class<?> clazz) {
         List<String> fieldNames = new ArrayList<>();
         while (clazz != null) {
             fieldNames.addAll(Arrays.stream(clazz.getDeclaredFields())
@@ -136,7 +138,7 @@ public class NodeFactory {
         } catch (ClassCastException e) {
             throw new ClassCastException("类型不匹配,需要的类型：" + clazz.getName() + "，实际类型：" + node.getClass());
         } catch (Exception e) {
-            throw new RuntimeException("Node创建失败,nodeName:" + nodeName, e);
+            throw new RuntimeException("Node注册失败: " + clazz.getSimpleName() + ",错误原因：" + e.getMessage(), e);
         }
     }
 

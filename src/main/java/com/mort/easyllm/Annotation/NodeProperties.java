@@ -6,7 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Mort
+ * 标注对应node的properties文件，
+ * nodename与@Node注解一致，
+ * 用于nodeFactory生成前端返回文件
+ * @Author Mort
+ * @Date 2024-07-23
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)

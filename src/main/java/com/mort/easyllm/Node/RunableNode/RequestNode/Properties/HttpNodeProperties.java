@@ -16,6 +16,7 @@ public class HttpNodeProperties {
     @NonNull
     private String url;
 
+    // TODO @nonnull有无更好的替换实现
     @NonNull
     private String method;
 

@@ -2,6 +2,7 @@ package com.mort.easyllm.Node.RunableNode.RequestNode;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.Annotation.Node;
+import com.mort.easyllm.Config.TongyiConfig;
 import com.mort.easyllm.Node.RunableNode.RequestNode.Utils.HttpUtil;
 import com.mort.easyllm.Node.RunableNode.RunnableNode;
 import com.mort.easyllm.Node.RunableNode.RequestNode.Properties.HttpNodeProperties;
@@ -14,6 +15,7 @@ public class HttpNodeImpl implements RunnableNode {
 
     private final HttpNodeProperties properties;
 
+
     public HttpNodeImpl(JSONObject properties) {
         this.properties = HttpNodeProperties.jsonObjectConvert(properties);
     }
@@ -21,6 +23,7 @@ public class HttpNodeImpl implements RunnableNode {
 
     @Getter
     private enum HTTP_METHOD_ENUMS {
+
         /**
          *
          * @Author Mort
