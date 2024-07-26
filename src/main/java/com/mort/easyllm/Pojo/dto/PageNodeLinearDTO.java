@@ -58,6 +58,6 @@ public class PageNodeLinearDTO {
     /**
      * 后续节点表，分支节点必传
      */
-    private List<String> nextNodesName;
+    private List<String> nextNodeNameList;
 
 }

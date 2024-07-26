@@ -1,7 +1,7 @@
 package com.mort.easyllm.Node.RunableNode.LLMNode.Properties;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Annotation.NodeProperties;
+import com.mort.easyllm.Annotation.Node.NodePropertiesField;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 @Builder
-@NodeProperties(nodeName = "IntentionJudgeNode")
+@NodePropertiesField(nodeName = "IntentionJudgeNode")
 public class IntentionJudgeProperties {
 
     @NonNull

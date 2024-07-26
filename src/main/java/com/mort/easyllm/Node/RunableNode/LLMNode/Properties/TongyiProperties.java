@@ -1,7 +1,7 @@
 package com.mort.easyllm.Node.RunableNode.LLMNode.Properties;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Annotation.NodeProperties;
+import com.mort.easyllm.Annotation.Node.NodePropertiesField;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @Builder
-@NodeProperties(nodeName = "TongyiNode")
+@NodePropertiesField(nodeName = "TongyiNode")
 public class TongyiProperties {
 
     private String sysMsg;

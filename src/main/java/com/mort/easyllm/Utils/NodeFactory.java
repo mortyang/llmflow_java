@@ -1,8 +1,8 @@
 package com.mort.easyllm.Utils;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Annotation.Node;
-import com.mort.easyllm.Annotation.NodeProperties;
+import com.mort.easyllm.Annotation.Node.Node;
+import com.mort.easyllm.Annotation.Node.NodePropertiesField;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
@@ -64,21 +64,21 @@ public class NodeFactory {
      */
     public static final Map<String, List<String>> FRONT_PAGE_CONFIG = new HashMap<>();
 
-    static {
-        scanAndRegisterNodes();
-    }
+//    static {
+//        scanAndRegisterNodes();
+//    }
 
-    private static void scanAndRegisterNodes() {
+    public static void scanAndRegisterNodes() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage("com.mort.easyllm.Node"))
         );
 
         Set<Class<?>> nodeClasses = reflections.getTypesAnnotatedWith(Node.class);
-        Set<Class<?>> nodePropertiesClasses = reflections.getTypesAnnotatedWith(NodeProperties.class);
+        Set<Class<?>> nodePropertiesClasses = reflections.getTypesAnnotatedWith(NodePropertiesField.class);
 
         Map<String, List<String>> nodePropertiesMap = new HashMap<>();
         for (Class<?> nodePropertiesClass : nodePropertiesClasses) {
-            String nodePropertiesName = nodePropertiesClass.getAnnotation(NodeProperties.class).nodeName();
+            String nodePropertiesName = nodePropertiesClass.getAnnotation(NodePropertiesField.class).nodeName();
             List<String> nodeProperties = getPropertiesField(nodePropertiesClass);
             nodePropertiesMap.put(nodePropertiesName, nodeProperties);
         }
@@ -100,7 +100,7 @@ public class NodeFactory {
             try {
                 //预注册，避免运行时使用反射,提高构建效率
                 Constructor<?> constructor = nodeClass.getConstructor(JSONObject.class);
-                return constructor.newInstance((JSONObject) initParameter);
+                return constructor.newInstance(initParameter);
             } catch (ClassCastException e) {
                 throw new RuntimeException("initParameter 必须是 JSONObject 类型");
             } catch (NoSuchMethodException e) {
@@ -115,7 +115,7 @@ public class NodeFactory {
     }
 
 
-    public static List<String> getPropertiesField(Class<?> clazz) {
+    private static List<String> getPropertiesField(Class<?> clazz) {
         List<String> fieldNames = new ArrayList<>();
         while (clazz != null) {
             fieldNames.addAll(Arrays.stream(clazz.getDeclaredFields())

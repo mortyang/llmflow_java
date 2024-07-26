@@ -17,7 +17,10 @@ public class TongyiUtil {
 
     public static String createFullSession(String input, TongyiConfig tongyiConfig, String... sysMsg) {
         try {
-            FullResponse.builder().modelName(tongyiConfig.getModelName()).apiKeys(tongyiConfig.getApiKey()).build();
+            FullResponse.builder()
+                    .modelName(tongyiConfig.getModelName())
+                    .apiKeys(tongyiConfig.getApiKey())
+                    .build();
             return TongyiUtil.fullResponseCreator(tongyiConfig).singleSession(input, sysMsg);
         } catch (NullPointerException e) {
             throw new RuntimeException("LLM parameter absent");

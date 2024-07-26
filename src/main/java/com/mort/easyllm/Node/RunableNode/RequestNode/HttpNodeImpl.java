@@ -1,8 +1,7 @@
 package com.mort.easyllm.Node.RunableNode.RequestNode;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Annotation.Node;
-import com.mort.easyllm.Config.TongyiConfig;
+import com.mort.easyllm.Annotation.Node.Node;
 import com.mort.easyllm.Node.RunableNode.RequestNode.Utils.HttpUtil;
 import com.mort.easyllm.Node.RunableNode.RunnableNode;
 import com.mort.easyllm.Node.RunableNode.RequestNode.Properties.HttpNodeProperties;
@@ -25,13 +24,11 @@ public class HttpNodeImpl implements RunnableNode {
     private enum HTTP_METHOD_ENUMS {
 
         /**
-         *
          * @Author Mort
          * @Date 2024-07-22
          */
         GET("get"),
         /**
-         *
          * @Author Mort
          * @Date 2024-07-22
          */
@@ -60,10 +57,11 @@ public class HttpNodeImpl implements RunnableNode {
             }
         } else if (HTTP_METHOD_ENUMS.POST.getMethod().equals(properties.getMethod())) {
             try (Response response = HttpUtil.HTTP_CLIENT.newCall(
-                            HttpUtil.generatePostRequest(properties.getUrl(),
-                                    properties.getHeaders(),
-                                    HttpUtil.gennerateRequestBody(properties.getBody(), properties.getHeaders() == null ? null : properties.getHeaders().get("Content-Type"))))
-                    .execute()) {
+                    HttpUtil.generatePostRequest(
+                            properties.getUrl(),
+                            properties.getHeaders(),
+                            HttpUtil.gennerateRequestBody(properties.getBody(), properties.getHeaders() == null ? null : properties.getHeaders().get("Content-Type")))
+            ).execute()) {
                 if (response.body() != null) {
                     return response.body().string();
                 }

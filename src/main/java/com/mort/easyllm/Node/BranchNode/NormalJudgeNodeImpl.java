@@ -1,11 +1,10 @@
 package com.mort.easyllm.Node.BranchNode;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Annotation.Node;
+import com.mort.easyllm.Annotation.Node.Node;
 import com.mort.easyllm.Node.BranchNode.Properties.NormalJudgeNodeProperties;
 import com.mort.easyllm.Node.InfoNode.InfoNode;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
@@ -15,8 +14,7 @@ public class NormalJudgeNodeImpl implements BranchNode {
     private final NormalJudgeNodeProperties properties;
 
     public NormalJudgeNodeImpl(JSONObject properties) {
-        this.properties = new NormalJudgeNodeProperties();
-        this.properties.setConditionToNodeMap(new HashMap<>());
+        this.properties = NormalJudgeNodeProperties.jsonObjectConvert(properties);
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.mort.easyllm.Node.RunableNode.LLMNode;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Annotation.Node;
+import com.mort.easyllm.Annotation.Node.Node;
 import com.mort.easyllm.Config.TongyiConfig;
 import com.mort.easyllm.Node.RunableNode.LLMNode.Properties.TongyiProperties;
 import com.mort.easyllm.Node.RunableNode.LLMNode.Utils.TongyiUtil;
@@ -22,8 +22,7 @@ public class TongyiNodeImpl implements RunnableNode {
 
     @Override
     public String run(String input) {
-        TongyiUtil.createFullSession(input,this.tongyiConfig,properties.getSysMsg());
-        return "";
+        return TongyiUtil.createFullSession(input,this.tongyiConfig,properties.getSysMsg());
     }
 
 }

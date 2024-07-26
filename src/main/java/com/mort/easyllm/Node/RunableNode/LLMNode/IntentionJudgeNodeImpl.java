@@ -1,7 +1,7 @@
 package com.mort.easyllm.Node.RunableNode.LLMNode;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Annotation.Node;
+import com.mort.easyllm.Annotation.Node.Node;
 import com.mort.easyllm.Config.TongyiConfig;
 import com.mort.easyllm.Node.RunableNode.LLMNode.Properties.IntentionJudgeProperties;
 import com.mort.easyllm.Node.RunableNode.LLMNode.Utils.TongyiUtil;

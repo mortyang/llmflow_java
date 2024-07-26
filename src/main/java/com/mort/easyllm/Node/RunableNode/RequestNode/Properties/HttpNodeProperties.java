@@ -3,20 +3,20 @@ package com.mort.easyllm.Node.RunableNode.RequestNode.Properties;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.alibaba.fastjson2.TypeReference;
-import com.mort.easyllm.Annotation.NodeProperties;
+import com.mort.easyllm.Annotation.Node.NodePropertiesField;
 import lombok.*;
 
 import java.util.Map;
 
 @Builder
 @Getter
-@NodeProperties(nodeName = "HttpNode")
+@NodePropertiesField(nodeName = "HttpNode")
 public class HttpNodeProperties {
+
+    // TODO @nonnull有无更好的替换实现
 
     @NonNull
     private String url;
-
-    // TODO @nonnull有无更好的替换实现
     @NonNull
     private String method;
 
