@@ -1,7 +1,7 @@
 spring:
   datasource: #本地
     name: micro  #数据库名
-    url: jdbc:mysql://localhost:3306/link-proj?useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
+    url: jdbc:mysql://localhost:3306/easy_llm?useSSL=false&serverTimezone=Asia/Shanghai&allowMultiQueries=true
     username: root  #用户名
     password: 123456  #密码
     driver-class-name: com.mysql.cj.jdbc.Driver

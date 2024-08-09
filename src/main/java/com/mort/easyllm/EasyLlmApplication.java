@@ -1,6 +1,7 @@
 package com.mort.easyllm;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.mort.easyllm.Service.WorkFlow.RunningWorkFlow;
 import com.mort.easyllm.Service.WorkFlow.WorkFlowService;
 import com.mort.easyllm.Utils.NodeFactory;
 import org.springframework.boot.SpringApplication;
@@ -13,8 +14,9 @@ import java.io.IOException;
 public class EasyLlmApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(EasyLlmApplication.class, args);
+        ApplicationContext run = SpringApplication.run(EasyLlmApplication.class, args);
         NodeFactory.scanAndRegisterNodes();
+        run.getBean(RunningWorkFlow.class).initRunningWorkFlow();
     }
 
 }

@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 @Builder
-@NodePropertiesField(nodeName = "IntentionJudgeNode")
+@NodePropertiesField(nodeType = "IntentionJudgeNode")
 public class IntentionJudgeProperties {
 
     @NonNull

@@ -18,6 +18,7 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class BranchInfoNode extends InfoNode {
 
+    //NodeName和InfoNode的映射
     private final Map<String, InfoNode> nextNodeMap = new HashMap<>();
 
     private final String defaultNodeName;

@@ -48,6 +48,11 @@ public class NodeFactory {
 //        }
 //    }
 
+    private NodeFactory() {
+        throw new UnsupportedOperationException("Utility class cannot be instantiated");
+    }
+
+
     /**
      * 节点注册Map，利用函数式接口快速创建对象
      *
@@ -78,13 +83,13 @@ public class NodeFactory {
 
         Map<String, List<String>> nodePropertiesMap = new HashMap<>();
         for (Class<?> nodePropertiesClass : nodePropertiesClasses) {
-            String nodePropertiesName = nodePropertiesClass.getAnnotation(NodePropertiesField.class).nodeName();
+            String nodePropertiesName = nodePropertiesClass.getAnnotation(NodePropertiesField.class).nodeType();
             List<String> nodeProperties = getPropertiesField(nodePropertiesClass);
             nodePropertiesMap.put(nodePropertiesName, nodeProperties);
         }
 
         for (Class<?> nodeClass : nodeClasses) {
-            String nodeName = nodeClass.getAnnotation(Node.class).nodeName();
+            String nodeName = nodeClass.getAnnotation(Node.class).nodeType();
             if (nodeName == null || nodeName.isEmpty()) {
                 throw new IllegalArgumentException(nodeClass.getName() + "-载入失败，请为手动为该Node指定名称");
             }
@@ -96,11 +101,11 @@ public class NodeFactory {
 
 
     private static Function<Object, Object> createNodeCreator(Class<?> nodeClass) {
-        return initParameter -> {
+        return (initParameter) -> {
             try {
-                //预注册，避免运行时使用反射,提高构建效率
+                //todo:意义
                 Constructor<?> constructor = nodeClass.getConstructor(JSONObject.class);
-                return constructor.newInstance(initParameter);
+                return constructor.newInstance((JSONObject) initParameter);
             } catch (ClassCastException e) {
                 throw new RuntimeException("initParameter 必须是 JSONObject 类型");
             } catch (NoSuchMethodException e) {

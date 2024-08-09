@@ -14,15 +14,25 @@ import java.util.Map;
  */
 @Builder
 @Getter
-@NodePropertiesField(nodeName = "NormalJudgeNode")
+@NodePropertiesField(nodeType = "NormalJudgeNode")
 public class NormalJudgeNodeProperties {
 
+    /**
+     *
+     * @Author Mort
+     * @Date 2024-08-08
+     */
     @NonNull
-    private Map<String,String> conditionToNodeMap;
+    private Map<String,String> nodeNameToConditionMap;
+
+    @NonNull
+    private String defaultNodeName;
+
 
     public static NormalJudgeNodeProperties jsonObjectConvert(JSONObject properties) {
         return NormalJudgeNodeProperties.builder()
-                .conditionToNodeMap(properties.getObject("conditionToNodeMap", new TypeReference<>() {
+                .defaultNodeName(properties.getString("defaultNodeName"))
+                .nodeNameToConditionMap(properties.getObject("nodeNameToConditionMap", new TypeReference<>() {
                 }))
                 .build();
     }

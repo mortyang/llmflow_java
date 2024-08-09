@@ -10,6 +10,7 @@ import org.jetbrains.annotations.NotNull;
  * @author Mort
  */
 @Getter
+@ToString
 public class InfoNode {
 
     @NonNull

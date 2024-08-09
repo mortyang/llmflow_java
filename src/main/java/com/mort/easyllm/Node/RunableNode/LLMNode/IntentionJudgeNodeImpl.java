@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * @author Mort
  */
-@Node(nodeName = "IntentionJudgeNode")
+@Node(nodeType = "IntentionJudgeNode")
 public class IntentionJudgeNodeImpl implements RunnableNode {
 
     private final IntentionJudgeProperties properties;
@@ -34,7 +34,8 @@ public class IntentionJudgeNodeImpl implements RunnableNode {
             str.append(intension);
             str.append(",");
         }
-        str.append("若有符合则返回对应意图，若均不符合返回：无匹配");
+        str.append("若有符合则返回对应意图，若均不符合以上意图必须返回：无匹配");
+        System.out.println(str);
         return str.toString();
     }
 

@@ -7,7 +7,7 @@ import com.mort.easyllm.Node.RunableNode.LLMNode.Properties.TongyiProperties;
 import com.mort.easyllm.Node.RunableNode.LLMNode.Utils.TongyiUtil;
 import com.mort.easyllm.Node.RunableNode.RunnableNode;
 
-@Node(nodeName = "TongyiNode")
+@Node(nodeType = "TongyiNode")
 public class TongyiNodeImpl implements RunnableNode {
 
     private final TongyiProperties properties;

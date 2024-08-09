@@ -1,6 +1,5 @@
 package com.mort.easyllm.Pojo.dto;
 
-
 import lombok.Data;
 
 import java.util.List;
@@ -8,10 +7,12 @@ import java.util.List;
 @Data
 public class WorkFlowDTO {
 
+    private Integer id;
+
     private String workFlowName;
 
-    private PageNodeDTO workFlow;
+    private List<PageNodeLinearDTO> workFlowList;
 
-    private List<PageNodeLinearDTO> workFLowList;
+    private String frontJson;
 
 }

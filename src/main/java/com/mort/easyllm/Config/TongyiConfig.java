@@ -27,7 +27,7 @@ public class TongyiConfig {
                 this.modelName = ModelNameEnums.valueOf(modelName);
             } catch (IllegalArgumentException ignore) {
                 this.modelName = DEFAULT_MODEL_NAME;
-                throw new RuntimeException("不存在的模型类型");
+//                throw new RuntimeException("不存在的模型类型");
             }
         } else {
             this.modelName = DEFAULT_MODEL_NAME;

@@ -9,7 +9,7 @@ import lombok.Getter;
 import okhttp3.Response;
 
 
-@Node(nodeName = "HttpNode")
+@Node(nodeType = "HttpNode")
 public class HttpNodeImpl implements RunnableNode {
 
     private final HttpNodeProperties properties;

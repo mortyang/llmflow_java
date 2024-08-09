@@ -16,7 +16,6 @@ public class PageNodeLinearDTO {
     @NonNull
     private String nodeName;
 
-    //TODO
     /**
      * 节点类型，指定Node类型
      */
@@ -56,7 +55,7 @@ public class PageNodeLinearDTO {
     private String defaultNodeName;
 
     /**
-     * 后续节点表，分支节点必传
+     * 后续节点表（包含default节点），分支节点必传，用于节点构建
      */
     private List<String> nextNodeNameList;
 

@@ -10,7 +10,7 @@ import lombok.Getter;
  */
 @Getter
 @Builder
-@NodePropertiesField(nodeName = "TongyiNode")
+@NodePropertiesField(nodeType = "TongyiNode")
 public class TongyiProperties {
 
     private String sysMsg;

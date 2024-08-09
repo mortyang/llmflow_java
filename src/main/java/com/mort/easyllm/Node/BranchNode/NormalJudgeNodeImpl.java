@@ -8,7 +8,10 @@ import com.mort.easyllm.Node.InfoNode.InfoNode;
 import java.util.Map;
 import java.util.Objects;
 
-@Node(nodeName = "NormalJudgeNode")
+/**
+ * @author Mort
+ */
+@Node(nodeType = "NormalJudgeNode")
 public class NormalJudgeNodeImpl implements BranchNode {
 
     private final NormalJudgeNodeProperties properties;
@@ -19,9 +22,9 @@ public class NormalJudgeNodeImpl implements BranchNode {
 
     @Override
     public InfoNode run(String input, Map<String, InfoNode> nextNodeMap) {
-        for (Map.Entry<String, String> conditionEntry : properties.getConditionToNodeMap().entrySet()) {
-            if (Objects.equals(input, conditionEntry.getKey())) {
-                return nextNodeMap.get(conditionEntry.getValue());
+        for (Map.Entry<String, String> conditionEntry : properties.getNodeNameToConditionMap().entrySet()) {
+            if (Objects.equals(input, conditionEntry.getValue())) {
+                return nextNodeMap.get(conditionEntry.getKey());
             }
         }
         return null;
