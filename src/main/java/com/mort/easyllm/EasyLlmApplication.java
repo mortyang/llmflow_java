@@ -16,7 +16,7 @@ public class EasyLlmApplication {
     public static void main(String[] args) {
         ApplicationContext run = SpringApplication.run(EasyLlmApplication.class, args);
         NodeFactory.scanAndRegisterNodes();
-        run.getBean(RunningWorkFlow.class).initRunningWorkFlow();
+//        run.getBean(RunningWorkFlow.class).initRunningWorkFlow();
     }
 
 }
