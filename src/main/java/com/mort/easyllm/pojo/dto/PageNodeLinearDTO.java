@@ -1,7 +1,7 @@
 package com.mort.easyllm.pojo.dto;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Node.InfoNode.InfoNode;
+import com.mort.easyllm.workFlow.Node.chainNode.InfoNode;
 import lombok.Data;
 import lombok.NonNull;
 

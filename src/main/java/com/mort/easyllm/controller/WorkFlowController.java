@@ -2,9 +2,9 @@ package com.mort.easyllm.controller;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.pojo.Result;
-import com.mort.easyllm.service.workFlow.WorkFlowService;
+import com.mort.easyllm.service.workFlow.WorkFlowServiceImpl;
 import com.mort.easyllm.pojo.dto.WorkFlowDTO;
-import com.mort.easyllm.utils.NodeFactory;
+import com.mort.easyllm.workFlow.Node.runnableNode.NodeFactory;
 import com.mort.easyllm.enums.StatusEnum;
 import com.mort.easyllm.mapper.WorkFlowMapper;
 import com.mort.easyllm.mapper.po.WorkFlowPo;
@@ -19,7 +19,7 @@ import java.util.List;
 public class WorkFlowController {
 
     @Autowired
-    private WorkFlowService workFlowService;
+    private WorkFlowServiceImpl workFlowServiceImpl;
 
     @Autowired
     private WorkFlowMapper workFlowMapper;
@@ -73,7 +73,7 @@ public class WorkFlowController {
 
     @PostMapping("/uploadWorkFlow")
     public Result<String> uploadWorkFlow(@RequestBody WorkFlowDTO workFlowDTO) {
-        workFlowService.uploadWorkFlow(workFlowDTO);
+        workFlowServiceImpl.uploadWorkFlow(workFlowDTO);
         return Result.<String>builder()
                 .code(StatusEnum.SUCCESS.getCode())
                 .message(StatusEnum.SUCCESS.getMessage())
