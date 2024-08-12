@@ -1,8 +1,8 @@
 package com.mort.easyllm.Node.InfoNode;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.Utils.NodeFactory;
-import com.mort.easyllm.Node.RunableNode.RunnableNode;
+import com.mort.easyllm.utils.NodeFactory;
+import com.mort.easyllm.Node.runnableNode.RunnableNode;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
