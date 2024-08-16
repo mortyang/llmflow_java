@@ -28,15 +28,13 @@ public class HttpNodeProperties {
 
 
     public static HttpNodeProperties jsonObjectConvert(JSONObject properties) {
-        HttpNodeProperties temp = HttpNodeProperties.builder()
+        return HttpNodeProperties.builder()
                 .url(properties.getString("url"))
                 .body(properties.getString("body"))
                 .method(properties.getString("method"))
                 .headers(properties.getObject("headers", new TypeReference<>() {
                 }))
                 .build();
-        ValidateUtil.validateAndThrow(temp);
-        return temp;
     }
 
 }

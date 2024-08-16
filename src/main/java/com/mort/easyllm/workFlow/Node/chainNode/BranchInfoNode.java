@@ -62,5 +62,4 @@ public class BranchInfoNode extends InfoNode {
         return input;
     }
 
-
 }

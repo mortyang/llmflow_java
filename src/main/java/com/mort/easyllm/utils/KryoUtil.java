@@ -30,7 +30,6 @@ public class KryoUtil {
     }
 
 
-
     public static byte[] serialize(Object object) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         Output output = new Output(baos);

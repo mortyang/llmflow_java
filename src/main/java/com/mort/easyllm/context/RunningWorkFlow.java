@@ -1,4 +1,4 @@
-package com.mort.easyllm.workFlow.service;
+package com.mort.easyllm.context;
 
 import com.mort.easyllm.workFlow.Node.chainNode.InfoNode;
 import com.mort.easyllm.utils.KryoUtil;
@@ -19,13 +19,18 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class RunningWorkFlow {
 
-    @Autowired
-    private WorkFlowMapper workFlowMapper;
 
+    private final WorkFlowMapper workFlowMapper;
+
+    @Autowired
+    public RunningWorkFlow(WorkFlowMapper workFlowMapper) {
+        this.workFlowMapper = workFlowMapper;
+    }
 
     public static Map<Integer, InfoNode> RunningWorkFlowMap = new ConcurrentHashMap<>();
 
 
+    //TODO：构建失败时需要获取json再次构建
     public void initRunningWorkFlow() {
         List<WorkFlowPo> enabledWorkFlow = workFlowMapper.getAllEnabledWorkFlowName();
         for (WorkFlowPo workFlowPo : enabledWorkFlow) {

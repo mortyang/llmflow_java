@@ -17,6 +17,8 @@ public class TongyiProperties {
 
     private String modelName;
 
+    private String needSessionContext;
+
     public static TongyiProperties jsonObjectConvert(JSONObject properties) {
         return TongyiProperties.builder()
                 .sysMsg(properties.getString("sysMsg"))

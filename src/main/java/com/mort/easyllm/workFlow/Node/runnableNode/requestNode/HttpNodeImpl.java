@@ -12,6 +12,7 @@ import okhttp3.Response;
 @Node(nodeType = "HttpNode")
 public class HttpNodeImpl implements NormalRunnableNode {
 
+
     private final HttpNodeProperties properties;
 
 

@@ -1,7 +1,5 @@
 package com.mort.easyllm.pojo.vo;
 
-public class frontNodeConfigVo {
-
-
+public class FrontNodeConfigVo {
 
 }

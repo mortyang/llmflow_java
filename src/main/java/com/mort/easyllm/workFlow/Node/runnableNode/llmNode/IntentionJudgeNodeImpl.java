@@ -21,6 +21,7 @@ public class IntentionJudgeNodeImpl implements NormalRunnableNode {
 
     private final TongyiConfig tongyiConfig;
 
+
     public IntentionJudgeNodeImpl(JSONObject properties) {
         this.properties = IntentionJudgeProperties.jsonObjectConvert(properties);
         this.tongyiConfig = new TongyiConfig(this.properties.getModelName());

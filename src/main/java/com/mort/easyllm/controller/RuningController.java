@@ -4,7 +4,7 @@ package com.mort.easyllm.controller;
 import com.mort.easyllm.workFlow.Node.chainNode.InfoNode;
 import com.mort.easyllm.pojo.Result;
 import com.mort.easyllm.pojo.dto.ChatRequestDto;
-import com.mort.easyllm.workFlow.service.RunningWorkFlow;
+import com.mort.easyllm.context.RunningWorkFlow;
 import com.mort.easyllm.service.workFlow.WorkFlowServiceImpl;
 import com.mort.easyllm.enums.StatusEnum;
 import org.springframework.beans.factory.annotation.Autowired;

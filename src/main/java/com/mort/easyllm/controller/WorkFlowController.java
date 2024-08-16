@@ -8,14 +8,21 @@ import com.mort.easyllm.workFlow.Node.runnableNode.NodeFactory;
 import com.mort.easyllm.enums.StatusEnum;
 import com.mort.easyllm.mapper.WorkFlowMapper;
 import com.mort.easyllm.mapper.po.WorkFlowPo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import javax.servlet.http.HttpServletRequest;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @RestController
 @RequestMapping("/workFlow")
 @CrossOrigin(origins = "*")
+@Slf4j
 public class WorkFlowController {
 
     @Autowired
@@ -79,5 +86,30 @@ public class WorkFlowController {
                 .message(StatusEnum.SUCCESS.getMessage())
                 .build();
     }
+
+
+    @GetMapping("/testRunNodeSSE/{param}")
+    public SseEmitter streamSseMvc(@PathVariable String param, HttpServletRequest request) {
+        SseEmitter emitter = new SseEmitter();
+        String customHeader = request.getHeader("Custom-Header");
+        ExecutorService sseMvcExecutor = Executors.newSingleThreadExecutor();
+        sseMvcExecutor.execute(() -> {
+            try {
+                for (int i = 0; true; i++) {
+                    SseEmitter.SseEventBuilder event = SseEmitter.event()
+                            .data("SSE MVC - " + LocalTime.now().toString() + customHeader + param)
+                            .id(String.valueOf(i))
+                            .name("sse event - mvc");
+                    emitter.send(event);
+                    Thread.sleep(1000);
+                }
+            } catch (Exception ex) {
+                log.error("error",ex);
+                emitter.completeWithError(ex);
+            }
+        });
+        return emitter;
+    }
+
 
 }
