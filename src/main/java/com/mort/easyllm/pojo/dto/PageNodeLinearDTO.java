@@ -5,6 +5,7 @@ import com.mort.easyllm.workFlow.Node.chainNode.InfoNode;
 import lombok.Data;
 import lombok.NonNull;
 
+import javax.validation.constraints.NotEmpty;
 import java.util.List;
 
 @Data
@@ -37,7 +38,6 @@ public class PageNodeLinearDTO {
      */
     private String nextNodeName;
 
-
     /**
      * 指向WorkFlow链上对应节点
      */
@@ -58,5 +58,7 @@ public class PageNodeLinearDTO {
      * 后续节点表（包含default节点），分支节点必传，用于节点构建
      */
     private List<String> nextNodeNameList;
+
+
 
 }

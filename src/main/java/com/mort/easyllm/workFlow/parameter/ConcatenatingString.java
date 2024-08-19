@@ -10,6 +10,7 @@ import java.util.List;
  * 用于支持含动态变量的文本
  * 传入的字符串会被拆分为文本和变量列表，获取时将变量列表的变量替换为对应全局变量中的值
  * 若出现无法找到的变量会按照字符串返回
+ *
  * @Author Mort
  * @Date 2024-08-13
  */
@@ -30,11 +31,15 @@ public class ConcatenatingString {
 
 
     public ConcatenatingString(String str) {
-          this.extractResult = extractPatterns(str);
+        if (str == null) {
+            this.extractResult = new ExtractResult();
+            return;
+        }
+        this.extractResult = extractPatterns(str);
     }
 
 
-    private String getString() {
+    public String getString() {
         Iterator<String> iterator = extractResult.variableParts.iterator();
         StringBuilder str = new StringBuilder();
         for (String text : extractResult.textParts) {
@@ -49,6 +54,10 @@ public class ConcatenatingString {
             str.append(GlobalVariables.getGlobalVariables().getOrDefault(var, "/${" + var + "}"));
         }
         return str.toString();
+    }
+
+    public boolean isEmpty() {
+        return this.extractResult.textParts.isEmpty() && this.extractResult.variableParts.isEmpty();
     }
 
 
@@ -90,7 +99,7 @@ public class ConcatenatingString {
                     current.append(input.charAt(i));
                 }
                 i++;
-            //单字符成功匹配的情况
+                //单字符成功匹配的情况
             } else if (j < pattern.length() && input.charAt(i) == pattern.charAt(j)) {
                 outside.append(input.charAt(i));
                 i++;
@@ -104,7 +113,7 @@ public class ConcatenatingString {
                     current = new StringBuilder();
                     j = 0;
                 }
-            //kmp匹配失败的情况
+                //kmp匹配失败的情况
             } else {
                 if (j != 0) {
                     j = lps[j - 1];
@@ -145,12 +154,13 @@ public class ConcatenatingString {
     }
 
 
-//    public static void main(String[] args) {
-//        String testString = "你好/${qwe}用/${户/${另一个{嵌套}/${期待}";
-//        ConcatenatingString concatenatingString = new ConcatenatingString(testString);
-//        System.out.println(concatenatingString.extractResult.textParts);
-//        System.out.println(concatenatingString.extractResult.variableParts);
-//        System.out.println(concatenatingString.getString());;
-//    }
+    public static void main(String[] args) {
+        String testString = "1";
+        ConcatenatingString concatenatingString = new ConcatenatingString(testString);
+        System.out.println(concatenatingString.extractResult.textParts.size());
+        System.out.println(concatenatingString.extractResult.variableParts.size());
+        System.out.println(concatenatingString.getString());
+        ;
+    }
 
 }

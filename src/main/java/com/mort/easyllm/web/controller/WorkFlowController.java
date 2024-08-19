@@ -1,8 +1,8 @@
-package com.mort.easyllm.controller;
+package com.mort.easyllm.web.controller;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.pojo.Result;
-import com.mort.easyllm.service.workFlow.WorkFlowServiceImpl;
+import com.mort.easyllm.web.service.workFlow.WorkFlowServiceImpl;
 import com.mort.easyllm.pojo.dto.WorkFlowDTO;
 import com.mort.easyllm.workFlow.Node.runnableNode.NodeFactory;
 import com.mort.easyllm.enums.StatusEnum;

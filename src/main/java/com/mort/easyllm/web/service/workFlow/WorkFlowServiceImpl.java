@@ -1,4 +1,4 @@
-package com.mort.easyllm.service.workFlow;
+package com.mort.easyllm.web.service.workFlow;
 
 import com.mort.easyllm.workFlow.Node.chainNode.InfoNode;
 import com.mort.easyllm.pojo.dto.WorkFlowDTO;

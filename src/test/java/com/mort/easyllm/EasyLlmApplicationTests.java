@@ -3,7 +3,7 @@ package com.mort.easyllm;
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.workFlow.Node.chainNode.InfoNode;
 import com.mort.easyllm.pojo.dto.WorkFlowDTO;
-import com.mort.easyllm.service.workFlow.WorkFlowServiceImpl;
+import com.mort.easyllm.web.service.workFlow.WorkFlowServiceImpl;
 import com.mort.easyllm.workFlow.Node.runnableNode.NodeFactory;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

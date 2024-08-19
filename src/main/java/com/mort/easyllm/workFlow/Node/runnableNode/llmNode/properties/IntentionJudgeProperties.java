@@ -1,6 +1,7 @@
 package com.mort.easyllm.workFlow.Node.runnableNode.llmNode.properties;
 
 import com.alibaba.fastjson2.JSONObject;
+import com.alibaba.fastjson2.TypeReference;
 import com.mort.easyllm.annotation.node.NodePropertiesField;
 import lombok.Builder;
 import lombok.Data;
@@ -31,7 +32,7 @@ public class IntentionJudgeProperties {
 
     public static IntentionJudgeProperties jsonObjectConvert(JSONObject properties) {
         return IntentionJudgeProperties.builder()
-                .intentions(properties.getList("intentions",String.class))
+                .intentions(properties.getObject("intentions", new TypeReference<>() {}))
                 .modelName(properties.getString("modelName"))
                 .hasMemory(properties.getBoolean("hasMemory"))
                 .build();

@@ -69,9 +69,6 @@ public class NodeFactory {
      */
     public static final Map<String, List<String>> FRONT_PAGE_CONFIG = new HashMap<>();
 
-//    static {
-//        scanAndRegisterNodes();
-//    }
 
     public static void scanAndRegisterNodes() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
@@ -124,8 +121,9 @@ public class NodeFactory {
         List<String> fieldNames = new ArrayList<>();
         while (clazz != null) {
             fieldNames.addAll(Arrays.stream(clazz.getDeclaredFields())
-                    .map(java.lang.reflect.Field::getName)
+                    .map(field -> field.getName())
                     .toList());
+
             clazz = clazz.getSuperclass();
         }
         return fieldNames;
