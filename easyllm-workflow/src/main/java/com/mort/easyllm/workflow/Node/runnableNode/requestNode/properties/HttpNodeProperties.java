@@ -1,39 +1,30 @@
 package com.mort.easyllm.workflow.Node.runnableNode.requestNode.properties;
 
 
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.TypeReference;
-import com.mort.easyllm.common.annotation.node.NodePropertiesField;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.mort.easyllm.common.annotation.node.NodeProperties;
 import lombok.*;
 
 
 import javax.validation.constraints.NotBlank;
 import java.util.Map;
 
-@Builder
-@Getter
-@NodePropertiesField(nodeType = "HttpNode")
+@Data
+@NodeProperties(nodeType = "HttpNode")
 public class HttpNodeProperties {
 
     @NotBlank(message = "Http的url不能为空")
+    @JSONField(name = "url")
     private String url;
 
     @NotBlank(message = "Http的method不能为空")
+    @JSONField(name = "method")
     private String method;
 
+    @JSONField(name = "headers")
     private Map<String, String> headers;
 
+    @JSONField(name = "body")
     private String body;
-
-
-    public static HttpNodeProperties jsonObjectConvert(JSONObject properties) {
-        return HttpNodeProperties.builder()
-                .url(properties.getString("url"))
-                .body(properties.getString("body"))
-                .method(properties.getString("method"))
-                .headers(properties.getObject("headers", new TypeReference<>() {
-                }))
-                .build();
-    }
 
 }

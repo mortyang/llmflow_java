@@ -1,12 +1,13 @@
 package com.mort.easyllm.workflow.Node.runnableNode.branchNode;
 
-import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.common.annotation.node.Node;
+import com.mort.easyllm.common.annotation.node.PropertiesInject;
 import com.mort.easyllm.workflow.Node.runnableNode.branchNode.properties.NormalJudgeNodeProperties;
 import com.mort.easyllm.workflow.Node.chainNode.InfoNode;
 
 import java.util.Map;
 import java.util.Objects;
+
 
 /**
  * @author Mort
@@ -14,11 +15,9 @@ import java.util.Objects;
 @Node(nodeType = "NormalJudgeNode")
 public class NormalJudgeNodeImpl implements BranchRunnableNode {
 
-    private final NormalJudgeNodeProperties properties;
+    @PropertiesInject
+    private NormalJudgeNodeProperties properties;
 
-    public NormalJudgeNodeImpl(JSONObject properties) {
-        this.properties = NormalJudgeNodeProperties.jsonObjectConvert(properties);
-    }
 
     @Override
     public InfoNode run(String input, Map<String, InfoNode> nextNodeMap) {

@@ -2,6 +2,7 @@ package com.mort.easyllm.workflow.Node.runnableNode.requestNode;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.common.annotation.node.Node;
+import com.mort.easyllm.common.annotation.node.PropertiesInject;
 import com.mort.easyllm.workflow.Node.runnableNode.requestNode.utils.HttpUtil;
 import com.mort.easyllm.workflow.Node.runnableNode.NormalRunnableNode;
 import com.mort.easyllm.workflow.Node.runnableNode.requestNode.properties.HttpNodeProperties;
@@ -12,13 +13,9 @@ import okhttp3.Response;
 @Node(nodeType = "HttpNode")
 public class HttpNodeImpl implements NormalRunnableNode {
 
+    @PropertiesInject
+    private HttpNodeProperties properties;
 
-    private final HttpNodeProperties properties;
-
-
-    public HttpNodeImpl(JSONObject properties) {
-        this.properties = HttpNodeProperties.jsonObjectConvert(properties);
-    }
 
 
     @Getter

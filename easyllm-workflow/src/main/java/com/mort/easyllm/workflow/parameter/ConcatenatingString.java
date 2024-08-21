@@ -1,6 +1,8 @@
 package com.mort.easyllm.workflow.parameter;
 
-import com.mort.easyllm.workflow.context.GlobalVariables;
+import com.alibaba.fastjson.annotation.JSONCreator;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.mort.easyllm.workflow.context.GlobalRunningVariables;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -14,6 +16,7 @@ import java.util.List;
  * @Author Mort
  * @Date 2024-08-13
  */
+
 public class ConcatenatingString {
 
 
@@ -30,12 +33,16 @@ public class ConcatenatingString {
     private final ExtractResult extractResult;
 
 
-    public ConcatenatingString(String str) {
-        if (str == null) {
+    @JSONCreator
+    public ConcatenatingString(@JSONField(name = "text") String text, @JSONField(name = "skip") Boolean skip) {
+        if (text == null) {
             this.extractResult = new ExtractResult();
+            if (skip) {
+                this.extractResult.textParts.add(text);
+            }
             return;
         }
-        this.extractResult = extractPatterns(str);
+        this.extractResult = extractPatterns(text);
     }
 
 
@@ -46,12 +53,12 @@ public class ConcatenatingString {
             str.append(text);
             if (iterator.hasNext()) {
                 String var = iterator.next();
-                str.append(GlobalVariables.getGlobalVariables().getOrDefault(var, "/${" + var + "}"));
+                str.append(GlobalRunningVariables.getGlobalVariables().getOrDefault(var, "/${" + var + "}"));
             }
         }
         if (iterator.hasNext()) {
             String var = iterator.next();
-            str.append(GlobalVariables.getGlobalVariables().getOrDefault(var, "/${" + var + "}"));
+            str.append(GlobalRunningVariables.getGlobalVariables().getOrDefault(var, "/${" + var + "}"));
         }
         return str.toString();
     }
@@ -156,11 +163,10 @@ public class ConcatenatingString {
 
     public static void main(String[] args) {
         String testString = "1";
-        ConcatenatingString concatenatingString = new ConcatenatingString(testString);
+        ConcatenatingString concatenatingString = new ConcatenatingString(testString,false);
         System.out.println(concatenatingString.extractResult.textParts.size());
         System.out.println(concatenatingString.extractResult.variableParts.size());
         System.out.println(concatenatingString.getString());
-        ;
     }
 
 }

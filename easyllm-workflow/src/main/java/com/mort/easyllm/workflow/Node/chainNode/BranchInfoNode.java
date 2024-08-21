@@ -26,7 +26,7 @@ public class BranchInfoNode extends InfoNode {
     //执行单元
     private final BranchRunnableNode branchRunnableNode;
 
-    //Node不允许被回收，无需清理
+    //用于多线程中指定下一节点
     private final ConcurrentHashMap<Thread, InfoNode> nextNodes = new ConcurrentHashMap<>();
 
 

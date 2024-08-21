@@ -5,7 +5,7 @@ import com.mort.easyllm.workflow.pojo.dto.WorkFlowDTO;
 import com.mort.easyllm.common.utils.KryoUtil;
 import com.mort.easyllm.main.mapper.WorkFlowMapper;
 import com.mort.easyllm.main.mapper.po.WorkFlowPo;
-import com.mort.easyllm.workflow.context.GlobalVariables;
+import com.mort.easyllm.workflow.context.GlobalRunningVariables;
 import com.mort.easyllm.main.context.RunningWorkFlow;
 import com.mort.easyllm.workflow.service.WorkFlowBuilder;
 
@@ -53,11 +53,11 @@ public class WorkFlowServiceImpl implements WorkFlowService {
                 if (nodeNow.getNextNode() == null) {
                     break;
                 }
-                GlobalVariables.getGlobalVariables().put(nodeNow.getNodeName(), textTemp);
+                GlobalRunningVariables.getGlobalVariables().put(nodeNow.getNodeName(), textTemp);
                 nodeNow = nodeNow.getNextNode();
             }
         } finally {
-            GlobalVariables.removeGlobalVariables();
+            GlobalRunningVariables.removeGlobalVariables();
         }
         return textTemp;
     }

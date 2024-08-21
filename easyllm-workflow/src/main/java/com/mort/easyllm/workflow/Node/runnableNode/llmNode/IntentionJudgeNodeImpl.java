@@ -2,11 +2,13 @@ package com.mort.easyllm.workflow.Node.runnableNode.llmNode;
 
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.common.annotation.node.Node;
-import com.mort.easyllm.common.config.TongyiConfig;
+import com.mort.easyllm.common.annotation.node.PropertiesInject;
+import com.mort.easyllm.common.parameter.Message;
+import com.mort.easyllm.llm.tongyi.impl.Tongyi;
 import com.mort.easyllm.workflow.Node.runnableNode.llmNode.properties.IntentionJudgeProperties;
-import com.mort.easyllm.workflow.Node.runnableNode.llmNode.utils.TongyiUtil;
 import com.mort.easyllm.workflow.Node.runnableNode.NormalRunnableNode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -19,13 +21,11 @@ public class IntentionJudgeNodeImpl implements NormalRunnableNode {
 
     private final String sysMsg;
 
-    private final TongyiConfig tongyiConfig;
-
-
-    public IntentionJudgeNodeImpl(JSONObject properties) {
-        this.properties = IntentionJudgeProperties.jsonObjectConvert(properties);
-        this.tongyiConfig = new TongyiConfig(this.properties.getModelName());
+    @PropertiesInject
+    public IntentionJudgeNodeImpl(IntentionJudgeProperties properties) {
+        this.properties = properties;
         this.sysMsg = generateSysMsg(this.properties.getIntentions());
+        throw new RuntimeException("12");
     }
 
     private String generateSysMsg(List<String> intensions) {
@@ -46,8 +46,11 @@ public class IntentionJudgeNodeImpl implements NormalRunnableNode {
      */
     @Override
     public String run(String input) {
-        // TODO 支持不同的模型平台
-        return TongyiUtil.createFullSession(input, this.tongyiConfig, sysMsg);
+        Tongyi tongyi = new Tongyi();
+        List<Message> list = new ArrayList<>();
+        list.add(Message.builder().role("system").text(sysMsg).build()) ;
+        list.add(Message.builder().role("user").text(input).build()) ;
+        return tongyi.fullSession(properties.getTongyiProperties(),list);
     }
 
 }

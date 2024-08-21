@@ -1,6 +1,6 @@
 package com.mort.easyllm.workflow.context;
 
-import com.mort.easyllm.workflow.parameter.Message;
+import com.mort.easyllm.common.parameter.Message;
 
 import java.util.ArrayList;
 import java.util.List;

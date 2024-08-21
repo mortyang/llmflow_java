@@ -1,10 +1,11 @@
 package com.mort.easyllm.workflow.Node.runnableNode.llmNode.properties;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.alibaba.fastjson2.TypeReference;
-import com.mort.easyllm.common.annotation.node.NodePropertiesField;
-import lombok.Builder;
+import com.alibaba.fastjson2.annotation.JSONField;
+import com.mort.easyllm.common.annotation.node.NodeProperties;
+import com.mort.easyllm.llm.tongyi.TongyiProperties;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import java.util.List;
@@ -13,30 +14,24 @@ import java.util.List;
  * @author Mort
  */
 @Data
-@Builder
-@NodePropertiesField(nodeType = "IntentionJudgeNode")
+@NodeProperties(nodeType = "IntentionJudgeNode")
 public class IntentionJudgeProperties {
 
     @NotEmpty(message = "意图不允许为空")
+    @JSONField(name = "intentions")
     private List<String> intentions;
 
-    @NotEmpty(message = "请指定是否需要记忆")
-    private Boolean hasMemory;
-
+    @JSONField(name = "modelName")
     private String modelName;
 
+    @JSONField(name = "modelProviderName")
     private String modelProviderName;
 
+    @JSONField(name = "needSessionContext")
     private String needSessionContext;
 
-
-    public static IntentionJudgeProperties jsonObjectConvert(JSONObject properties) {
-        return IntentionJudgeProperties.builder()
-                .intentions(properties.getObject("intentions", new TypeReference<>() {}))
-                .modelName(properties.getString("modelName"))
-                .hasMemory(properties.getBoolean("hasMemory"))
-                .build();
-    }
+    @JSONField(name = "tongyiProperties")
+    private TongyiProperties tongyiProperties;
 
 
 }

@@ -6,10 +6,12 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * @author Mort
+ * 用于标注节点配置类注入的入口
+ * ，可以用于标注字段或是构造函数
+ * @Author Mort
+ * @Date 2024-07-23
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface NodeProperties {
-    String nodeType();
+@Target({ElementType.FIELD,ElementType.CONSTRUCTOR})
+public @interface PropertiesInject {
 }

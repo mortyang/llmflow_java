@@ -105,7 +105,7 @@ public class WorkFlowController {
                     Thread.sleep(1000);
                 }
             } catch (Exception ex) {
-                log.error("error",ex);
+                log.error("发生错误,error",ex);
                 emitter.completeWithError(ex);
             }
         });

@@ -30,7 +30,6 @@ public class ExtractionParameter {
             this.type = type;
             this.name = name;
         }
-
     }
 
 
