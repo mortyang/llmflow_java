@@ -3,6 +3,7 @@ package com.mort.easyllm.workflow.Node.chainNode;
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.workflow.Node.runnableNode.NodeFactory;
 import com.mort.easyllm.workflow.Node.runnableNode.branchNode.BranchRunnableNode;
+import io.reactivex.functions.Consumer;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,7 +27,7 @@ public class BranchInfoNode extends InfoNode {
     //执行单元
     private final BranchRunnableNode branchRunnableNode;
 
-    //用于多线程中指定下一节点
+    //用于将每个线程与其对应的下一个 InfoNode 关联起来。该映射用于跟踪本节点不同线程在执行过程中生成的下一个节点。
     private final ConcurrentHashMap<Thread, InfoNode> nextNodes = new ConcurrentHashMap<>();
 
 
@@ -51,9 +52,10 @@ public class BranchInfoNode extends InfoNode {
     }
 
 
+
     @Override
-    public String runNode(String input) {
-        InfoNode nextNode = this.branchRunnableNode.run(input, nextNodeMap);
+    public final String runNode(String input, Consumer<String> callback) {
+        InfoNode nextNode = this.branchRunnableNode.run(nextNodeMap);
         if (nextNode == null) {
             nextNode = this.nextNodeMap.get(this.defaultNodeName);
         }

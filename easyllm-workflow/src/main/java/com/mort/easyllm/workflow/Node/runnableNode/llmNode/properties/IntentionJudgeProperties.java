@@ -1,13 +1,12 @@
 package com.mort.easyllm.workflow.Node.runnableNode.llmNode.properties;
 
-import com.alibaba.fastjson2.annotation.JSONField;
-import com.mort.easyllm.common.annotation.node.NodeProperties;
-import com.mort.easyllm.llm.tongyi.TongyiProperties;
+import com.mort.easyllm.workflow.annotation.node.NodeProperties;
+import com.mort.easyllm.llm.supplier.tongyi.TongyiProperties;
+import com.mort.easyllm.workflow.parameter.ConcatenatingString;
 import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 /**
@@ -17,21 +16,13 @@ import java.util.List;
 @NodeProperties(nodeType = "IntentionJudgeNode")
 public class IntentionJudgeProperties {
 
+    @NotNull(message = "输入不为空")
+    private ConcatenatingString input;
+
     @NotEmpty(message = "意图不允许为空")
-    @JSONField(name = "intentions")
     private List<String> intentions;
 
-    @JSONField(name = "modelName")
-    private String modelName;
-
-    @JSONField(name = "modelProviderName")
-    private String modelProviderName;
-
-    @JSONField(name = "needSessionContext")
-    private String needSessionContext;
-
-    @JSONField(name = "tongyiProperties")
-    private TongyiProperties tongyiProperties;
+    private TongyiProperties llmProperties;
 
 
 }

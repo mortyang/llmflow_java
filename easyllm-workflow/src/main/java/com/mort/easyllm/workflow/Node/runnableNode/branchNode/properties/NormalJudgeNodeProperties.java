@@ -1,11 +1,11 @@
 package com.mort.easyllm.workflow.Node.runnableNode.branchNode.properties;
 
-import com.alibaba.fastjson2.annotation.JSONField;
-import com.mort.easyllm.common.annotation.node.NodeProperties;
-import lombok.Builder;
+import com.mort.easyllm.workflow.annotation.node.NodeProperties;
+import com.mort.easyllm.workflow.parameter.ConcatenatingString;
 import lombok.Data;
-import lombok.Getter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Map;
 
 
@@ -17,14 +17,13 @@ import java.util.Map;
 @NodeProperties(nodeType = "NormalJudgeNode")
 public class NormalJudgeNodeProperties {
 
-    /**
-     * @Author Mort
-     * @Date 2024-08-08
-     */
-    @JSONField(name = "nodeNameToConditionMap")
-    private Map<String,String> nodeNameToConditionMap;
+    @NotNull(message = "输入不允许为空")
+    private ConcatenatingString input;
 
-    @JSONField(name = "defaultNodeName")
+    @NotNull(message = "节点表不允许为空")
+    private Map<String, String> nodeNameToConditionMap;
+
+    @NotBlank(message = "分支节点必须有默认节点")
     private String defaultNodeName;
 
 }

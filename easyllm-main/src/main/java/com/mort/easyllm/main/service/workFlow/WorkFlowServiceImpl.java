@@ -5,12 +5,12 @@ import com.mort.easyllm.workflow.pojo.dto.WorkFlowDTO;
 import com.mort.easyllm.common.utils.KryoUtil;
 import com.mort.easyllm.main.mapper.WorkFlowMapper;
 import com.mort.easyllm.main.mapper.po.WorkFlowPo;
-import com.mort.easyllm.workflow.context.GlobalRunningVariables;
 import com.mort.easyllm.main.context.RunningWorkFlow;
 import com.mort.easyllm.workflow.service.WorkFlowBuilder;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 /**
@@ -26,12 +26,15 @@ public class WorkFlowServiceImpl implements WorkFlowService {
     @Autowired
     private WorkFlowMapper workFlowMapper;
 
+    @Autowired
+    private RedisTemplate<Object, Object> redisTemplate;
+
 
     public InfoNode createWorkFlow(WorkFlowDTO workFlowDTO) {
         return workFlowBuilder.buildWorkFlow(workFlowDTO.getWorkFlowList());
     }
 
-    public void uploadWorkFlow(WorkFlowDTO workFlowDTO) {
+    public void buildWorkFlow(WorkFlowDTO workFlowDTO) {
         InfoNode s = workFlowBuilder.buildWorkFlow(workFlowDTO.getWorkFlowList());
         byte[] objectByte = KryoUtil.serialize(s);
         RunningWorkFlow.RunningWorkFlowMap.put(workFlowDTO.getId(), KryoUtil.deserialize(objectByte, InfoNode.class));
@@ -40,26 +43,6 @@ public class WorkFlowServiceImpl implements WorkFlowService {
                 .frontJson(workFlowDTO.getFrontJson())
                 .runnableObjectByte(objectByte)
                 .build());
-    }
-
-    public String runWorkFlow(InfoNode startNode, String userInput) {
-        InfoNode nodeNow = startNode;
-        String textTemp = userInput;
-        try {
-            while (true) {
-                log.info("节点开始执行：{},input:{}", nodeNow.getNodeName(), textTemp);
-                textTemp = nodeNow.runNode(textTemp);
-                log.info("节点执行结束：{},output:{}", nodeNow.getNodeName(), textTemp);
-                if (nodeNow.getNextNode() == null) {
-                    break;
-                }
-                GlobalRunningVariables.getGlobalVariables().put(nodeNow.getNodeName(), textTemp);
-                nodeNow = nodeNow.getNextNode();
-            }
-        } finally {
-            GlobalRunningVariables.removeGlobalVariables();
-        }
-        return textTemp;
     }
 
 }

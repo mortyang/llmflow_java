@@ -3,6 +3,7 @@ package com.mort.easyllm.workflow.Node.chainNode;
 import com.alibaba.fastjson2.JSONObject;
 import com.mort.easyllm.workflow.Node.runnableNode.NodeFactory;
 import com.mort.easyllm.workflow.Node.runnableNode.NormalRunnableNode;
+import io.reactivex.functions.Consumer;
 import lombok.*;
 import org.jetbrains.annotations.NotNull;
 
@@ -47,8 +48,8 @@ public class InfoNode {
     }
 
 
-    public String runNode(String input) {
-        return this.normalRunnableNode.run(input);
+    public String runNode(String input, Consumer<String> callback) {
+        return this.normalRunnableNode.run(this,callback);
     }
 
 

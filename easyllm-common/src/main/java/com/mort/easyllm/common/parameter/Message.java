@@ -12,6 +12,13 @@ public class Message {
 
     private final String text;
 
+    @Builder
+    @JsonCreator
+    public Message(@JsonProperty("role") String role, @JsonProperty("text") String text) {
+        this.text = text;
+        this.role = Role.valueOf(role);
+    }
+
     @Getter
     public enum Role {
 
@@ -24,13 +31,6 @@ public class Message {
         Role(String roleName) {
             this.roleName = roleName;
         }
-    }
-
-    @Builder
-    @JsonCreator
-    public Message(@JsonProperty("role") String role, @JsonProperty("text") String text) {
-        this.text = text;
-        this.role = Role.valueOf(role);
     }
 
 }

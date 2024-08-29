@@ -10,6 +10,3 @@ server:
 logging:
   file:
     name: micro.log
-tongyi:
-  api-key: sk-40a4dab15f134fa0b2c5a4c7a7a44a1b
-  model-name: qwen-turbo

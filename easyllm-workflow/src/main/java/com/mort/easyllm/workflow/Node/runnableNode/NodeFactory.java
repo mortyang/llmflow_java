@@ -1,9 +1,10 @@
 package com.mort.easyllm.workflow.Node.runnableNode;
 
 import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.common.annotation.node.Node;
-import com.mort.easyllm.common.annotation.node.NodeProperties;
-import com.mort.easyllm.common.annotation.node.PropertiesInject;
+import com.mort.easyllm.workflow.annotation.node.Node;
+import com.mort.easyllm.workflow.annotation.node.NodeProperties;
+import com.mort.easyllm.workflow.annotation.node.PropertiesInject;
+import com.mort.easyllm.common.utils.ValidateUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.reflections.Reflections;
 import org.reflections.util.ClasspathHelper;
@@ -57,24 +58,15 @@ public class NodeFactory {
 
 
     /**
-     * 节点注册Map，利用函数式接口快速创建对象
+     * 节点注册Map，利用函数式接口减少注册map使用
      *
      * @Author Mort
      * @Date 2024-07-22
      */
     private static final Map<String, Function<JSONObject, Object>> NODE_CREATORS = new ConcurrentHashMap<>();
 
-    /**
-     * 前端配置Map，负责存储对应node的配置信息返回给前端
-     *
-     * @Author Mort
-     * @Date 2024-07-22
-     */
-    public static final Map<String, List<String>> FRONT_PAGE_CONFIG = new HashMap<>();
 
-    public static final Map<String, Class<?>> PROPERTIES_MAP = new HashMap<>();
-
-
+//todo错误处理在此处
     public static void scanAndRegisterNodes() {
         Reflections reflections = new Reflections(new ConfigurationBuilder()
                 .setUrls(ClasspathHelper.forPackage("com.mort.easyllm.workFlow.Node"))
@@ -85,24 +77,21 @@ public class NodeFactory {
 
         Map<String, Class<?>> nodePropertiesMap = new HashMap<>();
         for (Class<?> nodePropertiesClass : nodePropertiesClasses) {
-//            List<String> nodeProperties = getPropertiesField(nodePropertiesClass);
             nodePropertiesMap.put(nodePropertiesClass.getAnnotation(NodeProperties.class).nodeType(),
                     nodePropertiesClass);
         }
-
         for (Class<?> nodeClass : nodeClasses) {
             String nodeName = nodeClass.getAnnotation(Node.class).nodeType();
             if (nodeName == null || nodeName.isEmpty()) {
                 throw new IllegalArgumentException(nodeClass.getName() + "-载入失败，请为手动为该Node指定名称");
             }
             NODE_CREATORS.put(nodeName, createNodeCreator(nodeClass, nodePropertiesMap.get(nodeName)));
-//            PROPERTIES_MAP.put(nodeName, nodePropertiesMap.get(nodeName));
-//            FRONT_PAGE_CONFIG.put(nodeName, nodePropertiesMap.get(nodeName));
         }
         log.info("完成包的扫描与初始化，找到了如下包{}", nodeClasses);
     }
 
 
+    // TODO：配置类变量和注入构造函数检查应该于启动构建时即完成
     private static Function<JSONObject, Object> createNodeCreator(Class<?> nodeClass, Class<?> nodePropertiesClass) {
         return (initParameter) -> {
             try {
@@ -111,9 +100,7 @@ public class NodeFactory {
                     throw new RuntimeException("未找到对应的配置类,node类名:" + nodeClass.getName());
                 }
                 Object properties = initParameter.to(nodePropertiesClass);
-//                ValidateUtil.validateAndThrow(properties); //校验
-//                Constructor<?> constructor = nodeClass.getConstructor(nodePropertiesClass);
-//                return constructor.newInstance(properties);
+                ValidateUtil.validateAndThrow(properties); //校验
 
                 Constructor<?>[] constructors = nodeClass.getDeclaredConstructors();
                 for (Constructor<?> constructor : constructors) {
@@ -136,9 +123,8 @@ public class NodeFactory {
                             field.setAccessible(true);
                             field.set(instance, properties);
                             propertyInjected = true;
-                            break; // 只需要处理一个字段
                         } else {
-                            throw new RuntimeException("Field marked with @PropertiesInject has mismatched type.");
+                            throw new RuntimeException("错误的properties字段类型，注入失败");
                         }
                     }
                 }
@@ -173,13 +159,14 @@ public class NodeFactory {
         if (creator == null) {
             throw new IllegalArgumentException("没有找到对应的node: " + nodeName);
         }
-        Object node = creator.apply(initParameter);
+        Object node = null;
         try {
+            node = creator.apply(initParameter);
             return clazz.cast(node);
         } catch (ClassCastException e) {
             throw new ClassCastException("类型不匹配,需要的类型：" + clazz.getName() + "，实际类型：" + node.getClass());
         } catch (Exception e) {
-            throw new RuntimeException("Node注册失败: " + clazz.getSimpleName() + ",错误原因：" + e.getMessage(), e);
+            throw new RuntimeException(String.format("节点：%s注册失败，失败原因：%s",nodeName,e.getMessage()), e);
         }
     }
 

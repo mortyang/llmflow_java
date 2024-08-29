@@ -1,7 +1,7 @@
 package com.mort.easyllm.workflow.Node.runnableNode.branchNode;
 
-import com.mort.easyllm.common.annotation.node.Node;
-import com.mort.easyllm.common.annotation.node.PropertiesInject;
+import com.mort.easyllm.workflow.annotation.node.Node;
+import com.mort.easyllm.workflow.annotation.node.PropertiesInject;
 import com.mort.easyllm.workflow.Node.runnableNode.branchNode.properties.NormalJudgeNodeProperties;
 import com.mort.easyllm.workflow.Node.chainNode.InfoNode;
 
@@ -20,9 +20,9 @@ public class NormalJudgeNodeImpl implements BranchRunnableNode {
 
 
     @Override
-    public InfoNode run(String input, Map<String, InfoNode> nextNodeMap) {
+    public InfoNode run(Map<String, InfoNode> nextNodeMap) {
         for (Map.Entry<String, String> conditionEntry : properties.getNodeNameToConditionMap().entrySet()) {
-            if (Objects.equals(input, conditionEntry.getValue())) {
+            if (Objects.equals(properties.getInput().getString(), conditionEntry.getValue())) {
                 return nextNodeMap.get(conditionEntry.getKey());
             }
         }

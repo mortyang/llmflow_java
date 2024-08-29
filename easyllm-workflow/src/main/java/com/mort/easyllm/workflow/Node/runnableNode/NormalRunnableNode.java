@@ -1,17 +1,15 @@
 package com.mort.easyllm.workflow.Node.runnableNode;
 
+import com.mort.easyllm.workflow.Node.chainNode.InfoNode;
+import io.reactivex.functions.Consumer;
+
 public interface NormalRunnableNode {
 
 
     /**
-     * @param input 默认输入
      * @return output
      */
-    String run(String input);
+    String run(InfoNode infoNode, Consumer<String> callback);
 
-
-    default String run(){
-        return null;
-    };
 
 }

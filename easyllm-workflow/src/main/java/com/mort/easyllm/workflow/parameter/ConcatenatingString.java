@@ -2,16 +2,17 @@ package com.mort.easyllm.workflow.parameter;
 
 import com.alibaba.fastjson.annotation.JSONCreator;
 import com.alibaba.fastjson2.annotation.JSONField;
-import com.mort.easyllm.workflow.context.GlobalRunningVariables;
+import com.mort.easyllm.common.context.SessionContext;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * 用于支持含动态变量的文本
  * 传入的字符串会被拆分为文本和变量列表，获取时将变量列表的变量替换为对应全局变量中的值
- * 若出现无法找到的变量会按照字符串返回
+ * 目前若出现无法找到的变量会原样返回
  *
  * @Author Mort
  * @Date 2024-08-13
@@ -21,66 +22,77 @@ public class ConcatenatingString {
 
 
     private static class ExtractResult {
-        List<String> textParts;
-        List<String> variableParts;
+        String[] textParts;
+        String[] variableParts;
 
-        private ExtractResult() {
-            this.textParts = new ArrayList<>();
-            this.variableParts = new ArrayList<>();
+        private ExtractResult(String[] textParts,
+                              String[] variableParts) {
+            this.textParts = textParts;
+            this.variableParts = variableParts;
         }
     }
 
     private final ExtractResult extractResult;
 
+    private final Boolean isNull;
+
 
     @JSONCreator
-    public ConcatenatingString(@JSONField(name = "text") String text, @JSONField(name = "skip") Boolean skip) {
+    public ConcatenatingString(@JSONField(name = "text") String text) {
         if (text == null) {
-            this.extractResult = new ExtractResult();
-            if (skip) {
-                this.extractResult.textParts.add(text);
-            }
+            this.isNull = true;
+            this.extractResult = null;
             return;
         }
+        this.isNull = false;
         this.extractResult = extractPatterns(text);
     }
 
 
     public String getString() {
-        Iterator<String> iterator = extractResult.variableParts.iterator();
+        if (isNull) return null;
+        Iterator<String> iterator = Arrays.stream(extractResult.variableParts).iterator();
         StringBuilder str = new StringBuilder();
         for (String text : extractResult.textParts) {
             str.append(text);
             if (iterator.hasNext()) {
-                String var = iterator.next();
-                str.append(GlobalRunningVariables.getGlobalVariables().getOrDefault(var, "/${" + var + "}"));
+                String varName = iterator.next();
+                if (SessionContext.getVariable(varName) == null) {
+                    throw new RuntimeException("无法获取到变量" + varName);
+                }
+                str.append(SessionContext.getVariable(varName));
             }
         }
         if (iterator.hasNext()) {
-            String var = iterator.next();
-            str.append(GlobalRunningVariables.getGlobalVariables().getOrDefault(var, "/${" + var + "}"));
+            String varName = iterator.next();
+            if (SessionContext.getVariable(varName) == null) {
+                throw new RuntimeException("无法获取到变量" + varName);
+            }
+            str.append(SessionContext.getVariable(varName));
         }
         return str.toString();
     }
 
     public boolean isEmpty() {
-        return this.extractResult.textParts.isEmpty() && this.extractResult.variableParts.isEmpty();
+        return this.extractResult.textParts.length == 0 && this.extractResult.variableParts.length == 0;
     }
 
 
     private static ExtractResult extractPatterns(String input) {
-        ExtractResult result = new ExtractResult();
         String pattern = "/${";
         int[] lps = computeLPSArray(pattern);
         int i = 0, j = 0;
 
+        List<String> textParts = new ArrayList<>();
+        List<String> variableParts = new ArrayList<>();
         StringBuilder current = new StringBuilder();
         StringBuilder outside = new StringBuilder();
+
         boolean expectingClosingBrace = false;
 
         //为了实现交叉，对/${为首进行特殊处理
         if (input.startsWith(pattern)) {
-            result.textParts.add("");
+            textParts.add("");
         }
 
         while (i < input.length()) {
@@ -88,19 +100,19 @@ public class ConcatenatingString {
             if (expectingClosingBrace) {
                 if (i + 2 < input.length() && input.charAt(i) == '/' && input.charAt(i + 1) == '$' && input.charAt(i + 2) == '{') {
                     outside.append(current);
-                    result.textParts.set(result.textParts.size() - 1, outside.toString());
+                    textParts.set(textParts.size() - 1, outside.toString());
                     current = new StringBuilder();
                     j = 0;
                     i = i + 3;
                     continue;
                 }
                 if (input.charAt(i) == '}') {
-                    result.variableParts.add(current.toString());
+                    variableParts.add(current.toString());
                     expectingClosingBrace = false;
                     outside = new StringBuilder();
                     //处理紧接着/${的情况
                     if (i + 3 < input.length() && input.charAt(i + 1) == '/' && input.charAt(i + 2) == '$' && input.charAt(i + 3) == '{') {
-                        result.textParts.add("");
+                        textParts.add("");
                     }
                 } else {
                     current.append(input.charAt(i));
@@ -114,7 +126,7 @@ public class ConcatenatingString {
                 //kmp匹配成功
                 if (j == pattern.length()) {
                     if (outside.length() > pattern.length()) {
-                        result.textParts.add(outside.substring(0, outside.length() - pattern.length()));
+                        textParts.add(outside.substring(0, outside.length() - pattern.length()));
                     }
                     expectingClosingBrace = true;
                     current = new StringBuilder();
@@ -132,11 +144,15 @@ public class ConcatenatingString {
         }
 
         if (!outside.isEmpty()) {
-            result.textParts.add(outside.toString());
+            textParts.add(outside.toString());
         }
-        return result;
+
+        return new ExtractResult(textParts.toArray(new String[0]),
+                variableParts.toArray(new String[0]));
     }
 
+
+    //KMP数组计算，使用KMP算法加速处理
     private static int[] computeLPSArray(String pattern) {
         int[] lps = new int[pattern.length()];
         int len = 0;
@@ -156,17 +172,16 @@ public class ConcatenatingString {
                 }
             }
         }
-
         return lps;
     }
 
-
-    public static void main(String[] args) {
-        String testString = "1";
-        ConcatenatingString concatenatingString = new ConcatenatingString(testString,false);
-        System.out.println(concatenatingString.extractResult.textParts.size());
-        System.out.println(concatenatingString.extractResult.variableParts.size());
-        System.out.println(concatenatingString.getString());
-    }
+//
+//    public static void main(String[] args) {
+//        String testString = "1";
+//        ConcatenatingString concatenatingString = new ConcatenatingString(testString, false);
+//        System.out.println(concatenatingString.extractResult.textParts.size());
+//        System.out.println(concatenatingString.extractResult.variableParts.size());
+//        System.out.println(concatenatingString.getString());
+//    }
 
 }

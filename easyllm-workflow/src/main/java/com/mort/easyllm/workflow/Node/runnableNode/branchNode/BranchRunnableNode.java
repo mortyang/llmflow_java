@@ -9,6 +9,6 @@ import java.util.Map;
  */
 public interface BranchRunnableNode {
 
-    InfoNode run(String input, Map<String,InfoNode> infoNode);
+    InfoNode run(Map<String,InfoNode> infoNode);
 
 }

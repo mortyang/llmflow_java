@@ -1,15 +1,19 @@
 package com.mort.easyllm.workflow.Node.runnableNode.llmNode;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.common.annotation.node.Node;
-import com.mort.easyllm.common.annotation.node.PropertiesInject;
+
+import com.mort.easyllm.common.context.SessionContext;
 import com.mort.easyllm.common.parameter.Message;
-import com.mort.easyllm.llm.tongyi.impl.Tongyi;
-import com.mort.easyllm.workflow.Node.runnableNode.llmNode.properties.IntentionJudgeProperties;
+import com.mort.easyllm.llm.supplier.tongyi.impl.Tongyi;
+import com.mort.easyllm.workflow.Node.chainNode.InfoNode;
 import com.mort.easyllm.workflow.Node.runnableNode.NormalRunnableNode;
+import com.mort.easyllm.workflow.Node.runnableNode.llmNode.properties.IntentionJudgeProperties;
+import com.mort.easyllm.workflow.annotation.node.Node;
+import com.mort.easyllm.workflow.annotation.node.PropertiesInject;
+import io.reactivex.functions.Consumer;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * @author Mort
@@ -25,32 +29,37 @@ public class IntentionJudgeNodeImpl implements NormalRunnableNode {
     public IntentionJudgeNodeImpl(IntentionJudgeProperties properties) {
         this.properties = properties;
         this.sysMsg = generateSysMsg(this.properties.getIntentions());
-        throw new RuntimeException("12");
     }
 
-    private String generateSysMsg(List<String> intensions) {
+    private String generateSysMsg(List<String> intentions) {
         StringBuilder str = new StringBuilder();
-        str.append("请判断下面的消息符合下面哪种意图，可能的意图如下：");
-        for (String intension : intensions) {
-            str.append(intension);
+        for (String intention : intentions) {
+            str.append(intention);
             str.append(",");
         }
-        str.append("若有符合则返回对应意图，若均不符合以上意图必须返回：无匹配");
-        System.out.println(str);
-        return str.toString();
+        String intentionsStr = str.toString();
+        return String.format("分析用户的输入，并检查是否是以下意图‘%s’。只有当用户输入的内容的意图包含‘%s’这些短语之一时，才返回‘%s’。如果用户输入内容中没有‘%s’这些意图，则返回‘无匹配",
+                intentionsStr, intentionsStr, intentionsStr, intentionsStr);
     }
 
     /**
-     * @param input 节点输入
      * @return 节点输出
      */
     @Override
-    public String run(String input) {
+    public String run(InfoNode infoNode, Consumer<String> callback) {
         Tongyi tongyi = new Tongyi();
         List<Message> list = new ArrayList<>();
-        list.add(Message.builder().role("system").text(sysMsg).build()) ;
-        list.add(Message.builder().role("user").text(input).build()) ;
-        return tongyi.fullSession(properties.getTongyiProperties(),list);
+        list.add(Message.builder().role("system").text(sysMsg).build());
+        list.add(Message.builder().role("user").text(properties.getInput().getString()).build());
+        String llmText = tongyi.fullSession(properties.getLlmProperties(), list);
+        if (!Objects.equals(llmText, "无匹配")) {
+            SessionContext.setLatestIntent(llmText);
+        } else {
+            if (SessionContext.getLatestIntent() != null) {
+                llmText = SessionContext.getLatestIntent();
+            }
+        }
+        return llmText;
     }
 
 }

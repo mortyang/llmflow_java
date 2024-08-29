@@ -1,11 +1,12 @@
 package com.mort.easyllm.workflow.Node.runnableNode.requestNode;
 
-import com.alibaba.fastjson2.JSONObject;
-import com.mort.easyllm.common.annotation.node.Node;
-import com.mort.easyllm.common.annotation.node.PropertiesInject;
+import com.mort.easyllm.workflow.Node.chainNode.InfoNode;
+import com.mort.easyllm.workflow.annotation.node.Node;
+import com.mort.easyllm.workflow.annotation.node.PropertiesInject;
 import com.mort.easyllm.workflow.Node.runnableNode.requestNode.utils.HttpUtil;
 import com.mort.easyllm.workflow.Node.runnableNode.NormalRunnableNode;
 import com.mort.easyllm.workflow.Node.runnableNode.requestNode.properties.HttpNodeProperties;
+import io.reactivex.functions.Consumer;
 import lombok.Getter;
 import okhttp3.Response;
 
@@ -15,7 +16,6 @@ public class HttpNodeImpl implements NormalRunnableNode {
 
     @PropertiesInject
     private HttpNodeProperties properties;
-
 
 
     @Getter
@@ -37,11 +37,12 @@ public class HttpNodeImpl implements NormalRunnableNode {
         HTTP_METHOD_ENUMS(String method) {
             this.method = method;
         }
+
     }
 
 
     @Override
-    public String run(String input) {
+    public String run(InfoNode infoNode, Consumer<String> callback) {
         if (HTTP_METHOD_ENUMS.GET.getMethod().equals(properties.getMethod())) {
             try (Response response = HttpUtil.HTTP_CLIENT.newCall(
                             HttpUtil.generateGetRequest(properties.getUrl(), properties.getHeaders()))
