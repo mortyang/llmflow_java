@@ -13,27 +13,26 @@ public class WorkFlowRunner {
 
     public String runWorkFlow(InfoNode startNode, String message) {
         InfoNode nodeNow = startNode;
-        String textTemp = message;
-        SessionContext.putGlobalVariable("userInput", "", textTemp);
+        SessionContext.putTemporaryVariable(message, "startNode");
         SessionContext.getHistoryMessages().add(Message.builder()
                 .text(message)
                 .role(Message.Role.user.getRoleName())
                 .build());
         while (true) {
-            log.info("节点开始执行：{},input:{}", nodeNow.getNodeName(), textTemp);
-            textTemp = nodeNow.runNode(textTemp, null);
-            log.info("节点执行结束：{},output:{}", nodeNow.getNodeName(), textTemp);
-            if (nodeNow.getNextNode() == null) {
+            log.info("节点开始执行：{}", nodeNow.getNodeName());
+            if (nodeNow.getNextNode() == null && !nodeNow.getIsBranchNode()) {
+                nodeNow.runNode(s -> {},true);
                 break;
             }
-            SessionContext.putGlobalVariable(nodeNow.getNodeName(), "", textTemp);
+            nodeNow.runNode(s -> {},false);
             nodeNow = nodeNow.getNextNode();
         }
+
         SessionContext.getHistoryMessages().add(Message.builder()
-                .text(textTemp)
+                .text(SessionContext.getVariableByName("endNode"))
                 .role(Message.Role.assist.getRoleName())
                 .build());
-        return textTemp;
+        return SessionContext.getVariableByName("endNode");
     }
 
 }

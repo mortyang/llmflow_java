@@ -54,14 +54,13 @@ public class BranchInfoNode extends InfoNode {
 
 
     @Override
-    public final String runNode(String input, Consumer<String> callback) {
+    public final void runNode( Consumer<String> callback,boolean isEndNode,boolean... debugMode) {
         InfoNode nextNode = this.branchRunnableNode.run(nextNodeMap);
         if (nextNode == null) {
             nextNode = this.nextNodeMap.get(this.defaultNodeName);
         }
         this.setNextNode(nextNode);
         log.info("判断节点：{}，下一节点：{}", this.getNodeName(), this.getNextNode().getNodeName());
-        return input;
     }
 
 }

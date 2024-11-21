@@ -13,7 +13,7 @@ import io.reactivex.functions.Consumer;
 import java.util.ArrayList;
 import java.util.List;
 
-@Node(nodeType = "TongyiNode")
+@Node(nodeType = "TongyiNode",canBeEndNode = true)
 public class TongyiNodeImpl implements NormalRunnableNode {
 
 
@@ -32,7 +32,12 @@ public class TongyiNodeImpl implements NormalRunnableNode {
             messages.addAll(SessionContext.getHistoryMessages());
         }
         messages.add(Message.builder().role("user").text(properties.getInput().getString()).build());
-        return tongyi.fullSession(properties.getLlmProperties(), messages);
+        String res = tongyi.fullSession(properties.getLlmProperties(), messages);
+        //可能为末端的节点
+        if(infoNode.getIsEndNode()){
+            SessionContext.putTemporaryVariable(res,"endNode");
+        }
+        return res;
     }
 
 }

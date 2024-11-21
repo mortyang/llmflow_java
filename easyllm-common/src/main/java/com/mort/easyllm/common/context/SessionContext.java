@@ -10,14 +10,16 @@ import java.util.Map;
 
 public class SessionContext {
 
+
+    /**
+     * SessionDataThreadLocal
+     */
+
     private static final ThreadLocal<SessionData> SessionDataThreadLocal = new ThreadLocal<>();
 
     private static final ThreadLocal<HashMap<String, String>> TemporaryVariables = ThreadLocal.withInitial(HashMap::new);
 
 
-    /**
-     * basic-SessionDataThreadLocal
-     */
     public static SessionData getSessionDataThreadLocal() {
         return SessionDataThreadLocal.get();
     }
@@ -33,7 +35,7 @@ public class SessionContext {
 
 
     /**
-     * getter
+     * SessionData getter
      */
     public static List<Message> getHistoryMessages() {
         return SessionContext.SessionDataThreadLocal.get().getHistoryMessages();
@@ -49,72 +51,39 @@ public class SessionContext {
 
 
     /**
-     * Intent
+     * SessionVariables
      */
-    public static void setLatestIntent(String intent) {
-        SessionDataThreadLocal.get().getSessionVariables().put("latestIntent", intent);
-        SessionContext.getSessionDataThreadLocal().setLatestIntent(intent);
-    }
-
-    public static String getLatestIntent() {
-        String intent = SessionDataThreadLocal.get().getSessionVariables().get("latestIntent");
-        if (intent == null) {
-            intent = SessionContext.getSessionDataThreadLocal().getLatestIntent();
-        }
-        return intent;
-    }
-
-
-    /**
-     * Variables
-     */
-    public static void putSessionVariable(String nodeName, String variableName, String text) {
-        if (variableName == null) {
-            SessionContext.TemporaryVariables.get()
-                    .put(nodeName, text);
-            return;
-        } else if (variableName.isEmpty()) {
-            SessionContext.TemporaryVariables.get()
-                    .put(nodeName, text);
-            return;
-        }
+    public static void putSessionVariable(String text, String nodeName, String... variableName) {
         SessionContext.getSessionDataThreadLocal()
                 .getSessionVariables()
-                .put(nodeName + "-" + variableName, text);
+                .put(handleVariableName(nodeName, variableName), text);
     }
 
-    public static void putGlobalVariable(String nodeName, String variableName, String text) {
-        if (variableName == null) {
-            SessionContext.TemporaryVariables.get()
-                    .put(nodeName, text);
-            return;
-        } else if (variableName.isEmpty()) {
-            SessionContext.TemporaryVariables.get()
-                    .put(nodeName, text);
-            return;
-        }
+    public static void putTemporaryVariable(String text, String nodeName, String... variableName) {
+        //此处指定了一个node的变量
         SessionContext.TemporaryVariables.get()
-                .put(nodeName + "-" + variableName, text);
+                .put(handleVariableName(nodeName, variableName), text);
     }
 
 
-    public static String getVariable(String variableName) {
-        String text = SessionContext.getSessionVariables().get(variableName);
+    public static String getVariableByName(String nodeName, String... variableName) {
+        String temp = handleVariableName(nodeName, variableName);
+        String text = SessionContext.getSessionVariables().get(temp);
         if (text == null) {
-            text = SessionContext.TemporaryVariables.get().get(variableName);
+            text = SessionContext.TemporaryVariables.get().get(temp);
         }
         return text;
     }
 
 
-    public static String getVariableAtLocation(String variableName, StorageLocation position) {
-        String text = null;
+    public static String getVariableAtLocation(StorageLocation position, String nodeName, String... variableName) {
+        String temp = handleVariableName(nodeName, variableName);
         if (position.equals(StorageLocation.SESSION)) {
-            text = SessionContext.getSessionVariables().get(variableName);
+            return SessionContext.getSessionVariables().get(temp);
         } else if (position.equals(StorageLocation.TEMPORARY)) {
-            text = SessionContext.TemporaryVariables.get().get(variableName);
+            return SessionContext.TemporaryVariables.get().get(temp);
         }
-        return text;
+        throw new IllegalArgumentException("Unknow StorageLocation");
     }
 
     public enum StorageLocation {
@@ -122,5 +91,15 @@ public class SessionContext {
         SESSION  // 持久化存储区域
     }
 
+
+    private static String handleVariableName(String nodeName, String... args) {
+        if (args.length > 1) {
+            throw new IllegalArgumentException("Only one argument is allowed.");
+        }
+        if (args.length == 1) {
+            return nodeName + "-" + args[0];
+        }
+        return nodeName;
+    }
 
 }

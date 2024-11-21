@@ -20,10 +20,18 @@ public class InfoNode {
     private final String nodeType;
     @NonNull
     private final Boolean isBranchNode;
-    // 执行单元
+
+
+    // 执行
+    // 单元
     private final NormalRunnableNode normalRunnableNode;
 
     private InfoNode nextNode;
+
+    private Boolean isEndNode =false;
+
+    private  Boolean isDebugMode = false;
+
 
     @Builder
     public InfoNode(@NonNull String nodeName,
@@ -47,10 +55,10 @@ public class InfoNode {
         this.nextNode = infoNode;
     }
 
-
-    public String runNode(String input, Consumer<String> callback) {
-        return this.normalRunnableNode.run(this,callback);
+    public void runNode(Consumer<String> callback,boolean isEndNode,boolean... debugMode) {
+        this.isEndNode = isEndNode;
+        this.isDebugMode = debugMode.length == 1 && debugMode[0];
+        this.normalRunnableNode.run(this, callback);
     }
-
 
 }

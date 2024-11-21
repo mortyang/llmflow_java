@@ -10,6 +10,8 @@ public enum StatusEnum {
 
     PARAMETER_ERROR("PARAMETER_ERROR","参数异常"),
 
+    NULL_NODE("NULL_NODE","不存在的Flow"),
+
     ERROT("ERROT","出现错误");
 
     private final String message;

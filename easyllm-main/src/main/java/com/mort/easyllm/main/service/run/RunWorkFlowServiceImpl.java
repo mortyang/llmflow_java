@@ -30,14 +30,13 @@ public class RunWorkFlowServiceImpl {
 
 
 
-
     public Result<SessionResponseVo> runWorkFlow(ChatRequestDto chatRequestDto, int id) {
         try {
             InfoNode runNode = RunningWorkFlow.RunningWorkFlowMap.get(id);
             if (runNode == null) {
                 return Result.<SessionResponseVo>builder()
-                        .message(StatusEnum.ERROT.getMessage())
-                        .code(StatusEnum.ERROT.getCode())
+                        .message(StatusEnum.NULL_NODE.getMessage())
+                        .code(StatusEnum.NULL_NODE.getCode())
                         .build();
             }
 
@@ -59,12 +58,12 @@ public class RunWorkFlowServiceImpl {
             }
             SessionContext.setSessionDataThreadLocal(sessionData);
 
+            //开始处理
             String res = workFlowRunner.runWorkFlow(runNode, chatRequestDto.getMessage());
 
-
+            //收集并清理上下文
             redisTemplate.opsForValue().set(chatRequestDto.getSessionId(), JSONObject.toJSONString(SessionContext.getSessionDataThreadLocal()));
             SessionContext.getSessionDataThreadLocal().getSessionVariables().clear();
-
             return Result.<SessionResponseVo>builder()
                     .message(StatusEnum.SUCCESS.getMessage())
                     .code(StatusEnum.SUCCESS.getCode())

@@ -8,6 +8,7 @@ import java.lang.annotation.Target;
 
 /**
  * 标注类是一个node，nodeFactory会将node扫描注册用于后续构建workflow
+ *
  * @Author Mort
  * @Date 2024-07-23
  */
@@ -15,4 +16,5 @@ import java.lang.annotation.Target;
 @Target(ElementType.TYPE)
 public @interface Node {
     String nodeType();
+    boolean canBeEndNode() default false;
 }

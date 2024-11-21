@@ -36,12 +36,15 @@ public class ParameterExtractionNode implements NormalRunnableNode {
                     .text("你是一个参数提取器，只需要回复我用户对应提到的：" + parameter.getParameterName()
                             + "信息,参数的描述为：" + parameter.getDescription() + "，若用户的消息中未提到" + parameter.getParameterName() + "请回复：未找到")
                     .build());
-            list.add(Message.builder().role(Message.Role.user.getRoleName()).text(properties.getInput().getString()).build());
+            list.add(Message.builder()
+                    .role(Message.Role.user.getRoleName())
+                    .text(properties.getInput().getString())
+                    .build());
             String llmMessage = tongyi.fullSession(properties.getLlmProperties(), list);
 
             //变量没找到且必选且之前没提到则报缺失
             if ((Objects.equals(llmMessage, "未找到") || !parameter.getParameterType().validate(llmMessage)) && parameter.getRequired()) {
-                if (SessionContext.getVariableAtLocation(parameter.getParameterName(), SessionContext.StorageLocation.SESSION) == null) {
+                if (SessionContext.getVariableAtLocation(SessionContext.StorageLocation.SESSION,parameter.getParameterName()) == null) {
                     missingParameter.append(parameter.getParameterName()).append(",");
                     continue;
                 }
@@ -50,10 +53,10 @@ public class ParameterExtractionNode implements NormalRunnableNode {
         }
 
         if (!missingParameter.isEmpty()) {
-            SessionContext.putGlobalVariable(infoNode.getNodeName(), "is_success", "0");
-            SessionContext.putGlobalVariable(infoNode.getNodeName(), "missingParameter", missingParameter.toString());
+            SessionContext.putTemporaryVariable( "0",infoNode.getNodeName(), "is_success");
+            SessionContext.putTemporaryVariable(missingParameter.toString(),infoNode.getNodeName(), "missingParameter");
         } else {
-            SessionContext.putGlobalVariable(infoNode.getNodeName(), "is_success", "1");
+            SessionContext.putTemporaryVariable("1",infoNode.getNodeName(), "is_success");
         }
 
         return missingParameter.toString();

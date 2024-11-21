@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+
 /**
  * @author Mort
  */
@@ -26,7 +27,6 @@ public class RunningWorkFlow {
     public RunningWorkFlow(WorkFlowMapper workFlowMapper) {
         this.workFlowMapper = workFlowMapper;
     }
-
 
     public static Map<Integer, InfoNode> RunningWorkFlowMap = new ConcurrentHashMap<>();
 

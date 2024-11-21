@@ -21,6 +21,4 @@ public class SessionData {
     private Map<String, String> sessionVariables;
 
 
-    private String latestIntent;
-
 }

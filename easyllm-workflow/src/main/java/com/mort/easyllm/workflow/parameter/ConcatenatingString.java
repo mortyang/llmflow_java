@@ -49,6 +49,7 @@ public class ConcatenatingString {
     }
 
 
+    //TODO 运行时错误处理
     public String getString() {
         if (isNull) return null;
         Iterator<String> iterator = Arrays.stream(extractResult.variableParts).iterator();
@@ -57,18 +58,18 @@ public class ConcatenatingString {
             str.append(text);
             if (iterator.hasNext()) {
                 String varName = iterator.next();
-                if (SessionContext.getVariable(varName) == null) {
+                if (SessionContext.getVariableByName(varName) == null) {
                     throw new RuntimeException("无法获取到变量" + varName);
                 }
-                str.append(SessionContext.getVariable(varName));
+                str.append(SessionContext.getVariableByName(varName));
             }
         }
         if (iterator.hasNext()) {
             String varName = iterator.next();
-            if (SessionContext.getVariable(varName) == null) {
+            if (SessionContext.getVariableByName(varName) == null) {
                 throw new RuntimeException("无法获取到变量" + varName);
             }
-            str.append(SessionContext.getVariable(varName));
+            str.append(SessionContext.getVariableByName(varName));
         }
         return str.toString();
     }
