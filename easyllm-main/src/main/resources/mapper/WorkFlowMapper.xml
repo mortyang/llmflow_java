@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mort.easyllm.main.mapper.WorkFlowMapper">
+
+    <resultMap id="workFlowPo" type="com.mort.easyllm.main.mapper.po.WorkFlowPo">
+        <result property="id" column="id" jdbcType="INTEGER"/>
+        <result property="workFlowName" column="workflow_name" jdbcType="VARCHAR"/>
+        <result property="permissionGroup" column="permission_group" jdbcType="VARCHAR"/>
+        <result property="runnableObjectByte" column="runnable_object" jdbcType="BLOB"/>
+        <result property="frontJson" column="front_json"/>
+        <result property="enabled" column="enabled" jdbcType="BOOLEAN"/>
+    </resultMap>
+
+
+    <select id="fetchWorkFlow" resultMap="workFlowPo">
+        select *
+        from workflow_info
+        where id = #{id}
+    </select>
+
+    <insert id="addWorkFlow">
+        insert into workflow_info (workflow_name)
+        VALUES (#{workFlowName})
+    </insert>
+
+    <delete id="deleteWorkFlow">
+        delete
+        from workflow_info
+        where id = #{id}
+    </delete>
+
+    <select id="getWorkFlowList" resultMap="workFlowPo">
+        select id, workflow_name, enabled
+        from workflow_info
+    </select>
+
+    <select id="getWorkFlowJson" resultType="string">
+        select front_json
+        from workflow_info
+        where id = #{id}
+    </select>
+
+    <select id="getWorkFlowListByPermissionGroup" resultMap="workFlowPo">
+        select *
+        from workflow_info
+        where permission_group = #{permissionGroup}
+    </select>
+
+    <update id="uploadWorkFlow" parameterType="com.mort.easyllm.main.mapper.po.WorkFlowPo">
+        update workflow_info
+        set runnable_object=#{workFlowPo.runnableObjectByte},
+            front_json=#{workFlowPo.frontJson}
+        where id = #{workFlowPo.id}
+    </update>
+
+    <select id="getAllEnabledWorkFlowName" resultMap="workFlowPo">
+        select id, workflow_name, permission_group, runnable_object
+        from workflow_info
+        where enabled=true
+    </select>
+
+
+</mapper>
