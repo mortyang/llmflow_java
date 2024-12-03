@@ -1,0 +1,19 @@
+2024-11-28 12:17:03.468  INFO 34673 --- [main] c.m.easyllm.main.EasyLLMMainApplication  : Starting EasyLLMMainApplication using Java 18.0.2 on MortdeMacBook-Pro.local with PID 34673 (/Users/mortyang/Documents/Dev/Project/yto/tongyi/EasyLLM/easyllm-main/target/classes started by mortyang in /Users/mortyang/Documents/Dev/Project/yto/tongyi/EasyLLM)
+2024-11-28 12:17:03.472  INFO 34673 --- [main] c.m.easyllm.main.EasyLLMMainApplication  : The following 1 profile is active: "dev"
+2024-11-28 12:17:03.790  INFO 34673 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Multiple Spring Data modules found, entering strict repository configuration mode
+2024-11-28 12:17:03.791  INFO 34673 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data Redis repositories in DEFAULT mode.
+2024-11-28 12:17:03.802  INFO 34673 --- [main] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 3 ms. Found 0 Redis repository interfaces.
+2024-11-28 12:17:04.152  INFO 34673 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat initialized with port(s): 8080 (http)
+2024-11-28 12:17:04.157  INFO 34673 --- [main] o.apache.catalina.core.StandardService   : Starting service [Tomcat]
+2024-11-28 12:17:04.157  INFO 34673 --- [main] org.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/9.0.65]
+2024-11-28 12:17:04.203  INFO 34673 --- [main] o.a.c.c.C.[Tomcat].[localhost].[/]       : Initializing Spring embedded WebApplicationContext
+2024-11-28 12:17:04.203  INFO 34673 --- [main] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 700 ms
+2024-11-28 12:17:04.743  INFO 34673 --- [main] o.s.b.w.embedded.tomcat.TomcatWebServer  : Tomcat started on port(s): 8080 (http) with context path ''
+2024-11-28 12:17:04.749  INFO 34673 --- [main] c.m.easyllm.main.EasyLLMMainApplication  : Started EasyLLMMainApplication in 1.494 seconds (JVM running for 1.85)
+2024-11-28 12:17:04.786  INFO 34673 --- [main] org.reflections.Reflections              : Reflections took 29 ms to scan 1 urls, producing 12 keys and 33 values
+2024-11-28 12:17:04.792  INFO 34673 --- [main] c.m.e.w.Node.runnableNode.NodeFactory    : 完成包的扫描与初始化，找到了如下包[class com.mort.easyllm.workflow.Node.runnableNode.llmNode.TongyiNodeImpl, class com.mort.easyllm.workflow.Node.runnableNode.variableNode.ParameterExtractionNode, class com.mort.easyllm.workflow.Node.runnableNode.requestNode.HttpNodeImpl, class com.mort.easyllm.workflow.Node.runnableNode.llmNode.IntentionJudgeNodeImpl, class com.mort.easyllm.workflow.Node.runnableNode.branchNode.NormalJudgeNodeImpl]
+2024-11-28 12:17:04.805  INFO 34673 --- [main] com.zaxxer.hikari.HikariDataSource       : micro - Starting...
+2024-11-28 12:17:04.946  INFO 34673 --- [main] com.zaxxer.hikari.HikariDataSource       : micro - Start completed.
+2024-11-28 12:17:05.083  INFO 34673 --- [main] c.m.e.main.context.RunningWorkFlow       : 初始化成功当前map：${10003=InfoNode(nodeName=llmJudge_1, nodeType=IntentionJudgeNode, isBranchNode=false, normalRunnableNode=com.mort.easyllm.workflow.Node.runnableNode.llmNode.IntentionJudgeNodeImpl@c6c84fa, nextNode=InfoNode(nodeName=judge_2, nodeType=NormalJudgeNode, isBranchNode=true, normalRunnableNode=null, nextNode=null, isEndNode=false, isDebugMode=false), isEndNode=false, isDebugMode=false)}
+2024-11-28 12:19:34.686  INFO 34673 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : micro - Shutdown initiated...
+2024-11-28 12:19:34.701  INFO 34673 --- [SpringApplicationShutdownHook] com.zaxxer.hikari.HikariDataSource       : micro - Shutdown completed.
